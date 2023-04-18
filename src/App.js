@@ -6,13 +6,13 @@ import { Route, Link, Routes } from "react-router-dom";
 import { useState } from "react";
 import { useLocation } from "react-router-dom";
 
-import Dashboard from "./Home/Dashboard";
+import Home from "./Home/Home";
 
 function App() {
   const location = useLocation();
   return (
     <div>
-      <Dashboard />
+      <Home />
     </div>
   );
 }
