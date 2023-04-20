@@ -55,38 +55,62 @@ const SignupPage = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    // if (passwordValid) {
+    //   try {
+    //     const response = await axios.get(
+    //       `http://localhost:8080/checkuser?email=${formData.email}`
+    //     );
+    //     if (response.data.exists) {
+    //       setMessage("This email address is already registered.");
+    //       setFormData({
+    //         firstName: "",
+    //         lastName: "",
+    //         email: "",
+    //         password: "",
+    //         userType: "",
+    //         country: "",
+    //       });
+    //       setPassword("");
+    //     } else {
+    //       const saveUserResponse = await axios.post(
+    //         "http://localhost:8080/saveuser",
+    //         formData
+    //       );
+    //       setMessage("You have successfully Signup");
+    //       setFormData({
+    //         firstName: "",
+    //         lastName: "",
+    //         email: "",
+    //         password: "",
+    //         userType: "",
+    //         country: "",
+    //       });
+    //       setPassword("");
+    //     }
+    //   } catch (error) {
+    //     console.log(error);
+    //     setMessage("An error occurred while submitting the form.");
+    //   }
+    // } else {
+    //   setMessage("Provide Valid Password");
+    //   return;
+    // }
     if (passwordValid) {
       try {
-        const response = await axios.get(
-          `http://localhost:8080/checkuser?email=${formData.email}`
+        const response = await axios.post(
+          "http://localhost:8080/checkuser",
+          formData
         );
-        if (response.data.exists) {
-          setMessage("This email address is already registered.");
-          setFormData({
-            firstName: "",
-            lastName: "",
-            email: "",
-            password: "",
-            userType: "",
-            country: "",
-          });
-          setPassword("");
-        } else {
-          const saveUserResponse = await axios.post(
-            "http://localhost:8080/saveuser",
-            formData
-          );
-          setMessage("You have successfully added User.");
-          setFormData({
-            firstName: "",
-            lastName: "",
-            email: "",
-            password: "",
-            userType: "",
-            country: "",
-          });
-          setPassword("");
-        }
+        setMessage("You have successfully signed up!");
+        setFormData({
+          firstName: "",
+          lastName: "",
+          email: "",
+          password: "",
+          userType: "",
+          country: "",
+        });
+        setPassword("");
       } catch (error) {
         console.log(error);
         setMessage("An error occurred while submitting the form.");

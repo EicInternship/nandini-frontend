@@ -26,6 +26,7 @@ const LoginPage = () => {
       const response = await axios.get(
         `http://localhost:8080/validuser?email=${formData.email}&password=${formData.password}`
       );
+
       if (response.data.isValidUser) {
         setMessage("Login successful!");
         setFormData({
@@ -34,16 +35,21 @@ const LoginPage = () => {
         });
       } else {
         setMessage("Invalid credentials. Please sign up.");
+        console.log("in else part");
         setFormData({
           email: "",
           password: "",
         });
       }
     } catch (error) {
-      setMessage("An error occurred while logging in.");
+      setMessage("Invalid credentials. Please sign up.");
+      console.log("in catch part");
+      setFormData({
+        email: "",
+        password: "",
+      });
     }
   };
-
   const passwordLength = formData.password.length;
   let emoji = <LockOutlinedIcon />;
   if (passwordLength >= 8) {

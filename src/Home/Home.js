@@ -13,13 +13,12 @@ import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
-import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import { Link } from "react-router-dom";
 import { Collapse } from "@mui/material";
-import { ExpandMore } from "@mui/icons-material";
+import { Dashboard, ExpandMore } from "@mui/icons-material";
 import { ExpandLess } from "@mui/icons-material";
 import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
 import { Button } from "@mui/material";
@@ -28,7 +27,7 @@ import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import LaptopMacIcon from "@mui/icons-material/LaptopMac";
 import Person3Icon from "@mui/icons-material/Person3";
-import logo from "./icon.png";
+import ErrorIcon from "@mui/icons-material/Error";
 import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
 import SignupPage from "../Component/SignupPage";
 import LoginPage from "../Component/LoginPage";
@@ -41,8 +40,9 @@ import { Catalog } from "./Catalog";
 import { ErrorPage } from "./Error/ErrorPage";
 import SearchIcon from "@mui/icons-material/Search";
 import { InputBase } from "@mui/material";
-const drawerWidth = 250;
+import ReportGmailerrorredRoundedIcon from "@mui/icons-material/ReportGmailerrorredRounded";
 
+const drawerWidth = 250;
 const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })(
   ({ theme, open }) => ({
     flexGrow: 1,
@@ -75,7 +75,6 @@ const Search = styled("div")(({ theme }) => ({
     width: "auto",
   },
 }));
-
 const SearchIconWrapper = styled("div")(({ theme }) => ({
   padding: theme.spacing(0, 2),
   height: "100%",
@@ -85,7 +84,6 @@ const SearchIconWrapper = styled("div")(({ theme }) => ({
   alignItems: "center",
   justifyContent: "center",
 }));
-
 const StyledInputBase = styled(InputBase)(({ theme }) => ({
   color: "inherit",
   "& .MuiInputBase-input": {
@@ -102,7 +100,6 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
     },
   },
 }));
-
 const AppBar = styled(MuiAppBar, {
   shouldForwardProp: (prop) => prop !== "open",
 })(({ theme, open }) => ({
@@ -119,7 +116,6 @@ const AppBar = styled(MuiAppBar, {
     }),
   }),
 }));
-
 const DrawerHeader = styled("div")(({ theme }) => ({
   display: "flex",
   alignItems: "center",
@@ -128,7 +124,6 @@ const DrawerHeader = styled("div")(({ theme }) => ({
   ...theme.mixins.toolbar,
   justifyContent: "flex-end",
 }));
-
 const StyledDashboardIcon = styled(DashboardIcon)({
   color: "black",
   "&:hover": {
@@ -171,27 +166,35 @@ const StyledMailIcon = styled(MailOutlinedIcon)({
     color: "#004280",
   },
 });
-const StyledListItemText = styled(ListItemText)({
+const StyledErrorIcon = styled(ErrorIcon)({
   color: "black",
-  ":hover": {
+  "&:hover": {
     color: "#004280",
   },
 });
-
+const StyledError1Icon = styled(ReportGmailerrorredRoundedIcon)({
+  color: "black",
+  "&:hover": {
+    color: "#004280",
+  },
+});
 const Home = () => {
   const theme = useTheme();
   const [open, setOpen] = useState(false);
-  const [listopen, setlistopen] = useState(false);
+  const [customerListOpen, setCustomerListOpen] = useState(false);
+  const [errorListOpen, setErrorListOpen] = useState(false);
 
   const handleDrawerOpen = () => {
     setOpen(true);
   };
-
   const handleDrawerClose = () => {
     setOpen(false);
   };
-  const handleClick = () => {
-    setlistopen(!listopen);
+  const handleCustomerClick = () => {
+    setCustomerListOpen(!customerListOpen);
+  };
+  const handleErrorClick = () => {
+    setErrorListOpen(!errorListOpen);
   };
 
   return (
@@ -309,15 +312,14 @@ const Home = () => {
             <ListItemText primary="Catalog" />
           </ListItemButton>
 
-          <ListItemButton onClick={handleClick}>
+          <ListItemButton onClick={handleCustomerClick}>
             <ListItemIcon>
               <StyledPersonIcon />
             </ListItemIcon>
             <ListItemText primary="Customer" />
-            {listopen ? <ExpandLess /> : <ExpandMore />}
+            {customerListOpen ? <ExpandLess /> : <ExpandMore />}
           </ListItemButton>
-
-          <Collapse in={listopen} timeout="auto" unmountOnExit>
+          <Collapse in={customerListOpen} timeout="auto" unmountOnExit>
             <List component="div" disablePadding>
               <ListItemButton
                 sx={{ pl: 4 }}
@@ -336,20 +338,41 @@ const Home = () => {
             <ListItemIcon>
               <StyledFavoriteBorderOutlined />
             </ListItemIcon>
+
             <ListItemText primary="Marketing" />
           </ListItemButton>
           <ListItemButton component={Link} to="/Order">
             <ListItemIcon>
               <StyledshoppingCart />
             </ListItemIcon>
+
             <ListItemText primary="Orders" />
           </ListItemButton>
           <ListItemButton component={Link} to="/Inbox">
             <ListItemIcon>
               <StyledMailIcon />
             </ListItemIcon>
+
             <ListItemText primary="Inbox" />
           </ListItemButton>
+          <ListItemButton onClick={handleErrorClick}>
+            <ListItemIcon>
+              <StyledErrorIcon />
+            </ListItemIcon>
+
+            <ListItemText primary="ErrorPage" />
+            {errorListOpen ? <ExpandLess /> : <ExpandMore />}
+          </ListItemButton>
+          <Collapse in={errorListOpen} timeout="auto" unmountOnExit>
+            <List component="div" disablePadding>
+              <ListItemButton sx={{ pl: 4 }} component={Link} to="ErrorPage">
+                <ListItemIcon>
+                  <StyledError1Icon />
+                </ListItemIcon>
+                <ListItemText primary="404" />
+              </ListItemButton>
+            </List>
+          </Collapse>
         </List>
       </Drawer>
       <Main open={open}>
@@ -358,6 +381,7 @@ const Home = () => {
       <Box component="main" sx={{ flexGrow: 12, p: 12 }}>
         <Typography>
           <Routes>
+            <Route path="/" element={<Dashboard />} />
             <Route path="/SignupPage" element={<SignupPage />} />
             <Route path="/LoginPage" element={<LoginPage />} />
             <Route path="Customer/CustomerList" element={<CustomerList />} />
