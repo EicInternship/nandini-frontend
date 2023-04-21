@@ -38,11 +38,10 @@ import { Inbox } from "./Inbox";
 import { Order } from "./Order";
 import { Catalog } from "./Catalog";
 import { ErrorPage } from "./Error/ErrorPage";
-import SearchIcon from "@mui/icons-material/Search";
-import { InputBase } from "@mui/material";
 import ReportGmailerrorredRoundedIcon from "@mui/icons-material/ReportGmailerrorredRounded";
 
 const drawerWidth = 250;
+
 const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })(
   ({ theme, open }) => ({
     flexGrow: 1,
@@ -75,31 +74,7 @@ const Search = styled("div")(({ theme }) => ({
     width: "auto",
   },
 }));
-const SearchIconWrapper = styled("div")(({ theme }) => ({
-  padding: theme.spacing(0, 2),
-  height: "100%",
-  position: "absolute",
-  pointerEvents: "none",
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
-}));
-const StyledInputBase = styled(InputBase)(({ theme }) => ({
-  color: "inherit",
-  "& .MuiInputBase-input": {
-    padding: theme.spacing(1, 1, 1, 0),
-    // vertical padding + font size from searchIcon
-    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-    transition: theme.transitions.create("width"),
-    width: "100%",
-    [theme.breakpoints.up("sm")]: {
-      width: "12ch",
-      "&:focus": {
-        width: "20ch",
-      },
-    },
-  },
-}));
+
 const AppBar = styled(MuiAppBar, {
   shouldForwardProp: (prop) => prop !== "open",
 })(({ theme, open }) => ({
@@ -219,18 +194,15 @@ const Home = () => {
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" noWrap component="div">
+          <Typography
+            variant="h5"
+            noWrap
+            component="div"
+            style={{ color: "#FFA500" }}
+          >
             Ecommerce Website
           </Typography>
-          <Search>
-            <SearchIconWrapper>
-              <SearchIcon />
-            </SearchIconWrapper>
-            <StyledInputBase
-              placeholder="Search…"
-              inputProps={{ "aria-label": "search" }}
-            />
-          </Search>
+
           <Typography
             variant="h6"
             noWrap
@@ -242,9 +214,16 @@ const Home = () => {
           <Link to="/SignupPage">
             <Button
               variant="outlined"
-              color="success"
               className="btn"
-              style={{ borderWidth: "2px", marginRight: "2px" }}
+              style={{
+                backgroundColor: "#FFA500",
+                fontSize: "15px",
+                margin: "4px",
+                alignItems: "center",
+                borderWidth: "2px",
+                marginLeft: "2px",
+                color: "black",
+              }}
             >
               <b>Signup</b>
             </Button>
@@ -252,9 +231,16 @@ const Home = () => {
           <Link to="/LoginPage">
             <Button
               variant="outlined"
-              color="success"
               className="btn"
-              style={{ borderWidth: "2px", marginLeft: "2px" }}
+              style={{
+                backgroundColor: "#FFA500",
+                fontSize: "15px",
+                margin: "4px",
+                alignItems: "center",
+                borderWidth: "2px",
+                marginLeft: "2px",
+                color: "black",
+              }}
             >
               <b>Login</b>
             </Button>
@@ -274,12 +260,19 @@ const Home = () => {
         anchor="left"
         open={open}
       >
-        <DrawerHeader style={{ backgroundColor: "#FFD333" }}>
+        <DrawerHeader style={{ backgroundColor: "#FFA500" }}>
           <Button
             variant="outlined"
-            color="success"
             className="btn"
-            style={{ borderWidth: "2px" }}
+            style={{
+              backgroundColor: "#FFA500",
+              fontSize: "15px",
+              margin: "4px",
+              alignItems: "center",
+              borderWidth: "2px",
+              marginLeft: "2px",
+              color: "black",
+            }}
           >
             <b>Admin</b>
           </Button>
@@ -381,7 +374,7 @@ const Home = () => {
       <Box component="main" sx={{ flexGrow: 12, p: 12 }}>
         <Typography>
           <Routes>
-            <Route path="/" element={<Dashboard />} />
+            <Route path="/" element={<SignupPage />} />
             <Route path="/SignupPage" element={<SignupPage />} />
             <Route path="/LoginPage" element={<LoginPage />} />
             <Route path="Customer/CustomerList" element={<CustomerList />} />

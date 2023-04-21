@@ -33,21 +33,25 @@ const LoginPage = () => {
           email: "",
           password: "",
         });
+      } else if (response.data.isEmailValid) {
+        setMessage("Password is incorrect. Please try again.");
+        setFormData({
+          password: "",
+        });
       } else {
         setMessage("Invalid credentials. Please sign up.");
-        console.log("in else part");
         setFormData({
           email: "",
           password: "",
         });
       }
     } catch (error) {
-      setMessage("Invalid credentials. Please sign up.");
-      console.log("in catch part");
+      setMessage("Error Occured");
       setFormData({
         email: "",
         password: "",
       });
+      console.log(error);
     }
   };
   const passwordLength = formData.password.length;
@@ -74,7 +78,7 @@ const LoginPage = () => {
         LOGIN
       </Typography>
       <form onSubmit={handleSubmit} sx={{ mt: 1 }}>
-        <Grid container spacing={2} alignItems="center">
+        <Grid container spacing={2} alignItems="center" justifyContent="center">
           <Grid item xs={12}>
             <TextField
               fullWidth
@@ -104,8 +108,13 @@ const LoginPage = () => {
               variant="contained"
               size="large"
               sx={({ mr: 2 }, { my: 3 })}
+              style={{
+                backgroundColor: "#9C27B0",
+                alignContent: "center",
+                display: "flex",
+              }}
             >
-              Login
+              <b>Login</b>
             </Button>
           </Grid>
           <Grid item xs={12}>

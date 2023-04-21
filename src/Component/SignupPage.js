@@ -52,72 +52,46 @@ const SignupPage = () => {
       setFormData({ ...formData, [name]: value });
     }
   };
-
   const handleSubmit = async (event) => {
     event.preventDefault();
-    // if (passwordValid) {
-    //   try {
-    //     const response = await axios.get(
-    //       `http://localhost:8080/checkuser?email=${formData.email}`
-    //     );
-    //     if (response.data.exists) {
-    //       setMessage("This email address is already registered.");
-    //       setFormData({
-    //         firstName: "",
-    //         lastName: "",
-    //         email: "",
-    //         password: "",
-    //         userType: "",
-    //         country: "",
-    //       });
-    //       setPassword("");
-    //     } else {
-    //       const saveUserResponse = await axios.post(
-    //         "http://localhost:8080/saveuser",
-    //         formData
-    //       );
-    //       setMessage("You have successfully Signup");
-    //       setFormData({
-    //         firstName: "",
-    //         lastName: "",
-    //         email: "",
-    //         password: "",
-    //         userType: "",
-    //         country: "",
-    //       });
-    //       setPassword("");
-    //     }
-    //   } catch (error) {
-    //     console.log(error);
-    //     setMessage("An error occurred while submitting the form.");
-    //   }
-    // } else {
-    //   setMessage("Provide Valid Password");
-    //   return;
-    // }
     if (passwordValid) {
       try {
-        const response = await axios.post(
-          "http://localhost:8080/checkuser",
-          formData
+        const checkUserResponse = await axios.get(
+          `http://localhost:8080/checkuser?email=${formData.email}`
         );
-        setMessage("You have successfully signed up!");
-        setFormData({
-          firstName: "",
-          lastName: "",
-          email: "",
-          password: "",
-          userType: "",
-          country: "",
-        });
-        setPassword("");
+        if (checkUserResponse.data.exists) {
+          setMessage("This email address is already registered.");
+          setFormData({
+            firstName: "",
+            lastName: "",
+            email: "",
+            password: "",
+            userType: "",
+            country: "",
+          });
+          setPassword("");
+        } else {
+          const saveUserResponse = await axios.post(
+            "http://localhost:8080/saveuser",
+            formData
+          );
+          setMessage("You have successfully signed up.");
+          setFormData({
+            firstName: "",
+            lastName: "",
+            email: "",
+            password: "",
+            userType: "",
+            country: "",
+          });
+          setPassword("");
+        }
       } catch (error) {
         console.log(error);
         setMessage("An error occurred while submitting the form.");
       }
     } else {
-      setMessage("Provide Valid Password");
-      return;
+      setMessage("Provide a valid password.");
     }
   };
 
@@ -228,12 +202,13 @@ const SignupPage = () => {
               size="large"
               sx={{ mr: 2 }}
               //  disabled={!passwordValid}
+              style={{ backgroundColor: "#9C27B0" }}
             >
-              Signup
+              <b>Signup</b>
             </Button>
 
             <Link href="LoginPage" variant="body2">
-              <LoginIcon fontSize="large" />
+              <LoginIcon fontSize="large" style={{ color: "#9C27B0" }} />
             </Link>
           </Grid>
 
