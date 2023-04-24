@@ -5,25 +5,37 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  TextField,
   Paper,
   TablePagination,
 } from "@mui/material";
-import { useFormik } from "formik";
 import { Checkbox } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import { styled } from "@mui/material";
 import { InputBase } from "@mui/material";
 import { useEffect, useState } from "react";
-import { UserService } from "../../Service/UserService";
+import { UserService } from "../../service/UserService";
 import React from "react";
 import { alpha } from "@mui/material";
+import { useFormik } from "formik";
+import Button from "@mui/material/Button";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
+import { MenuItem } from "@mui/material";
+import { Select } from "@mui/material";
+import IconButton from "@mui/material/IconButton";
+import Menu from "@mui/material/Menu";
+import { Link, Routes, useNavigate } from "react-router-dom";
+import { Route } from "react-router-dom";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { orange } from "@mui/material/colors";
 
 const Customer = () => {
   const [user, setUser] = useState([]);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
-  const [error, setError] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
+  const [filteruser, setFilterUser] = useState([]);
+  const [error, setError] = useState("");
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -34,50 +46,8 @@ const Customer = () => {
     setPage(0);
   };
 
-  const SearchIconWrapper = styled("div")(({ theme }) => ({
-    padding: theme.spacing(0, 2),
-    height: "100%",
-    position: "absolute",
-    pointerEvents: "none",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-  }));
-
-  const StyledInputBase = styled(InputBase)(({ theme }) => ({
-    color: "inherit",
-    "& .MuiInputBase-input": {
-      padding: theme.spacing(1, 1, 1, 0),
-      // vertical padding + font size from searchIcon
-      paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-      transition: theme.transitions.create("width"),
-      width: "100%",
-      [theme.breakpoints.up("sm")]: {
-        width: "12ch",
-        "&:focus": {
-          width: "20ch",
-        },
-      },
-    },
-  }));
-
-  const Search = styled("div")(({ theme }) => ({
-    position: "relative",
-    borderRadius: theme.shape.borderRadius,
-    backgroundColor: alpha(theme.palette.common.white, 0.15),
-    "&:hover": {
-      backgroundColor: alpha(theme.palette.common.white, 0.25),
-    },
-    marginLeft: 0,
-    width: "100%",
-    [theme.breakpoints.up("sm")]: {
-      marginLeft: theme.spacing(1),
-      width: "auto",
-    },
-  }));
-
   useEffect(() => {
-    UserService().then((res) => setUser(res.data));
+    UserService.getUser().then((res) => setUser(res.data));
   }, []);
 
   const filteredData = user.filter(
@@ -90,30 +60,106 @@ const Customer = () => {
     setSearchQuery(e.target.value);
   };
 
+  const frm = useFormik({
+    initialValues: {
+      id: "",
+    },
+    onSubmit: (values) => {
+      const filteredUser = user.filter(
+        (user1) => user1.firstName === values.id
+      );
+      setFilterUser(filteredUser);
+
+      if (filteredUser.length === 0) {
+        setError(`User with Name ${values.id} not found.`);
+        setFilterUser([]);
+      } else {
+        setError("");
+        setFilterUser(filteredUser);
+      }
+    },
+  });
+
+  const data = filteruser.length > 0 ? filteruser : filteredData;
+
   const start = page * rowsPerPage;
   const end = start + rowsPerPage;
-  const visibleData = filteredData.slice(start, end);
+  const visibleData = data.slice(start, end);
 
+  const options = ["Add", "Delete", "Update"];
+  const ITEM_HEIGHT = 48;
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const open = Boolean(anchorEl);
+  const navigate = useNavigate();
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleMenuItemClick = (option) => {
+    if (option === "Add") {
+      navigate("/Add");
+      handleClose();
+    } else if (option === "Delete") {
+      handleClose();
+      navigate("/Delete");
+    } else {
+      handleClose();
+      navigate("/Update");
+    }
+  };
+  const innerTheme = createTheme({
+    palette: {
+      primary: {
+        main: orange[600],
+      },
+    },
+  });
   return (
     <div style={{ margin: "auto" }}>
-      <Search>
-        <SearchIconWrapper>
+      <div>
+        <form onSubmit={frm.handleSubmit}>
           <SearchIcon />
-        </SearchIconWrapper>
-        <StyledInputBase
-          placeholder="Search…"
-          inputProps={{ "aria-label": "search" }}
-          value={searchQuery}
-          onChange={handleSearch}
-        />
-      </Search>
+
+          <TextField
+            name="id"
+            onChange={frm.handleChange}
+            placeholder="Enter Customer Name"
+            variant="standard"
+          />
+          <Button
+            size="small"
+            type="submit"
+            variant="outlined"
+            className="btn"
+            style={{
+              backgroundColor: "#FFA500",
+              fontSize: "15px",
+              //margin: "7px",
+              // marginBottom:"30px",
+              alignItems: "center",
+              borderWidth: "2px",
+              marginLeft: "11px",
+              color: "black",
+            }}
+          >
+            <b>submit</b>
+          </Button>
+        </form>
+      </div>
+
+      {error && <p className="error">{error}</p>}
       {filteredData.length > 0 && (
         <TableContainer component={Paper}>
           <Table aria-label="customer table">
             <TableHead>
               <TableRow>
                 <TableCell>
-                  <Checkbox />
+                  <ThemeProvider theme={innerTheme}>
+                    <Checkbox />
+                  </ThemeProvider>
                 </TableCell>
                 <TableCell sx={{ fontWeight: "bold" }}>Name</TableCell>
                 <TableCell sx={{ fontWeight: "bold" }}>Registered</TableCell>
@@ -125,7 +171,9 @@ const Customer = () => {
               {visibleData.map((users) => (
                 <TableRow key={users.email}>
                   <TableCell>
-                    <Checkbox />
+                    <ThemeProvider theme={innerTheme}>
+                      <Checkbox />
+                    </ThemeProvider>
                   </TableCell>
                   <TableCell>
                     {users.firstName + " " + users.lastName}
@@ -133,6 +181,43 @@ const Customer = () => {
                   <TableCell>{users.signupDate}</TableCell>
                   <TableCell>{users.country}</TableCell>
                   <TableCell>{users.userType}</TableCell>
+                  <TableCell>
+                    <IconButton
+                      aria-label="more"
+                      id="long-button"
+                      aria-controls={open ? "long-menu" : undefined}
+                      aria-expanded={open ? "true" : undefined}
+                      aria-haspopup="true"
+                      onClick={handleClick}
+                    >
+                      <MoreVertIcon />
+                    </IconButton>
+                    <Menu
+                      id="long-menu"
+                      MenuListProps={{
+                        "aria-labelledby": "long-button",
+                      }}
+                      anchorEl={anchorEl}
+                      open={open}
+                      onClose={handleClose}
+                      PaperProps={{
+                        style: {
+                          maxHeight: ITEM_HEIGHT * 4.5,
+                          width: "20ch",
+                        },
+                      }}
+                    >
+                      {options.map((option) => (
+                        <MenuItem
+                          key={option}
+                          selected={option === "Add"}
+                          onClick={() => handleMenuItemClick(option)}
+                        >
+                          {option}
+                        </MenuItem>
+                      ))}
+                    </Menu>
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>
@@ -146,7 +231,7 @@ const Customer = () => {
         onPageChange={handleChangePage}
         rowsPerPage={rowsPerPage}
         onRowsPerPageChange={handleChangeRowsPerPage}
-        rowsPerPageOptions={[5, 10]}
+        rowsPerPageOptions={[5, 10, 15]}
       />
     </div>
   );

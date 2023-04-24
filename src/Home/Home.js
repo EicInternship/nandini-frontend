@@ -29,16 +29,22 @@ import LaptopMacIcon from "@mui/icons-material/LaptopMac";
 import Person3Icon from "@mui/icons-material/Person3";
 import ErrorIcon from "@mui/icons-material/Error";
 import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
-import SignupPage from "../Component/SignupPage";
-import LoginPage from "../Component/LoginPage";
+import SignupPage from "../component/SignupPage";
+import LoginPage from "../component/LoginPage";
 import { Routes, Route } from "react-router-dom";
-import CustomerList from "./Customer/CustomerList";
+import CustomerList from "./customer/CustomerList";
+import { DashboardPage } from "./dashboard/DashboardPage";
 import { Marketing } from "./Marketing";
 import { Inbox } from "./Inbox";
 import { Order } from "./Order";
 import { Catalog } from "./Catalog";
-import { ErrorPage } from "./Error/ErrorPage";
+import { ErrorPage } from "./error/ErrorPage";
 import ReportGmailerrorredRoundedIcon from "@mui/icons-material/ReportGmailerrorredRounded";
+import { Admin } from "../component/Admin";
+import AddCustomer from "./customer/AddCustomer";
+//import { DeleteCustomer } from "./customer/DeleteCustomer";
+import DeleteCustomer from "./customer/DeleteCustomer";
+import { UpdateCustomer } from "./customer/UpdateCustomer";
 
 const drawerWidth = 250;
 
@@ -261,21 +267,23 @@ const Home = () => {
         open={open}
       >
         <DrawerHeader style={{ backgroundColor: "#FFA500" }}>
-          <Button
-            variant="outlined"
-            className="btn"
-            style={{
-              backgroundColor: "#FFA500",
-              fontSize: "15px",
-              margin: "4px",
-              alignItems: "center",
-              borderWidth: "2px",
-              marginLeft: "2px",
-              color: "black",
-            }}
-          >
-            <b>Admin</b>
-          </Button>
+          <Link to="/Admin">
+            <Button
+              variant="outlined"
+              className="btn"
+              style={{
+                backgroundColor: "#FFA500",
+                fontSize: "15px",
+                margin: "4px",
+                alignItems: "center",
+                borderWidth: "2px",
+                marginLeft: "2px",
+                color: "black",
+              }}
+            >
+              <b>Admin</b>
+            </Button>
+          </Link>
           {/* <img
             src={logo}
             sx={{ flexGrow: 1 }}
@@ -292,7 +300,7 @@ const Home = () => {
         </DrawerHeader>
         <Divider />
         <List>
-          <ListItemButton component={Link} to="/Dashboard">
+          <ListItemButton component={Link} to="/DashboardPage">
             <ListItemIcon>
               <StyledDashboardIcon />
             </ListItemIcon>
@@ -374,15 +382,21 @@ const Home = () => {
       <Box component="main" sx={{ flexGrow: 12, p: 12 }}>
         <Typography>
           <Routes>
-            <Route path="/" element={<SignupPage />} />
+            <Route path="/" element={<DashboardPage />} />
             <Route path="/SignupPage" element={<SignupPage />} />
+            <Route path="/Admin" element={<Admin />} />
             <Route path="/LoginPage" element={<LoginPage />} />
             <Route path="Customer/CustomerList" element={<CustomerList />} />
             <Route path="/Catalog" element={<Catalog />} />
             <Route path="/Order" element={<Order />} />
             <Route path="/Inbox" element={<Inbox />} />
             <Route path="/Marketing" element={<Marketing />} />
+            <Route path="/DashboardPage" element={<DashboardPage />} />
             <Route path="/*" element={<ErrorPage />} />
+            <Route path="/Add" element={<AddCustomer />} />
+            <Route path="/Delete" element={<DeleteCustomer />} />
+            <Route path="/Update" element={<UpdateCustomer />} />
+            <Route path="/CustomerList" element={<CustomerList />} />
           </Routes>
         </Typography>
       </Box>
