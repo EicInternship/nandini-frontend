@@ -11,23 +11,18 @@ import {
 } from "@mui/material";
 import { Checkbox } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
-import { styled } from "@mui/material";
-import { InputBase } from "@mui/material";
 import { useEffect, useState } from "react";
 import { UserService } from "../../service/UserService";
 import React from "react";
-import { alpha } from "@mui/material";
 import { useFormik } from "formik";
 import Button from "@mui/material/Button";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
-import { MenuItem } from "@mui/material";
-import { Select } from "@mui/material";
-import IconButton from "@mui/material/IconButton";
-import Menu from "@mui/material/Menu";
+import AddIcon from "@mui/icons-material/Add";
+import DeleteIcon from "@mui/icons-material/Delete";
 import { Link, Routes, useNavigate } from "react-router-dom";
 import { Route } from "react-router-dom";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { orange } from "@mui/material/colors";
+import PersonAddAlt1Icon from "@mui/icons-material/PersonAddAlt1";
 
 const Customer = () => {
   const [user, setUser] = useState([]);
@@ -36,6 +31,7 @@ const Customer = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [filteruser, setFilterUser] = useState([]);
   const [error, setError] = useState("");
+  const [Id, setId] = useState(null);
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -86,8 +82,6 @@ const Customer = () => {
   const end = start + rowsPerPage;
   const visibleData = data.slice(start, end);
 
-  const options = ["Add", "Delete", "Update"];
-  const ITEM_HEIGHT = 48;
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
   const navigate = useNavigate();
@@ -97,19 +91,6 @@ const Customer = () => {
   const handleClose = () => {
     setAnchorEl(null);
   };
-
-  const handleMenuItemClick = (option) => {
-    if (option === "Add") {
-      navigate("/Add");
-      handleClose();
-    } else if (option === "Delete") {
-      handleClose();
-      navigate("/Delete");
-    } else {
-      handleClose();
-      navigate("/Update");
-    }
-  };
   const innerTheme = createTheme({
     palette: {
       primary: {
@@ -117,6 +98,11 @@ const Customer = () => {
       },
     },
   });
+  const handleDeleteOperation = (event, id) => {
+    console.log("ID IS:" + id);
+    navigate("/Delete", { state: { id } });
+  };
+
   return (
     <div style={{ margin: "auto" }}>
       <div>
@@ -148,6 +134,26 @@ const Customer = () => {
             <b>submit</b>
           </Button>
         </form>
+        <Button
+          sx={{ fontWeight: "bold" }}
+          component={Link}
+          to="/Add"
+          size="small"
+          variant="outlined"
+          className="btn"
+          style={{
+            backgroundColor: "#FFA500",
+            fontSize: "15px",
+            alignItems: "center",
+            borderWidth: "2px",
+            marginLeft: "705px",
+            marginTop: "-55px",
+            color: "black",
+          }}
+        >
+          <PersonAddAlt1Icon />
+          <b> Customer</b>
+        </Button>
       </div>
 
       {error && <p className="error">{error}</p>}
@@ -161,6 +167,7 @@ const Customer = () => {
                     <Checkbox />
                   </ThemeProvider>
                 </TableCell>
+                <TableCell sx={{ fontWeight: "bold" }}>Id</TableCell>
                 <TableCell sx={{ fontWeight: "bold" }}>Name</TableCell>
                 <TableCell sx={{ fontWeight: "bold" }}>Registered</TableCell>
                 <TableCell sx={{ fontWeight: "bold" }}>Country</TableCell>
@@ -175,6 +182,7 @@ const Customer = () => {
                       <Checkbox />
                     </ThemeProvider>
                   </TableCell>
+                  <TableCell>{users.id}</TableCell>
                   <TableCell>
                     {users.firstName + " " + users.lastName}
                   </TableCell>
@@ -182,41 +190,19 @@ const Customer = () => {
                   <TableCell>{users.country}</TableCell>
                   <TableCell>{users.userType}</TableCell>
                   <TableCell>
-                    <IconButton
-                      aria-label="more"
-                      id="long-button"
-                      aria-controls={open ? "long-menu" : undefined}
-                      aria-expanded={open ? "true" : undefined}
-                      aria-haspopup="true"
-                      onClick={handleClick}
-                    >
-                      <MoreVertIcon />
-                    </IconButton>
-                    <Menu
-                      id="long-menu"
-                      MenuListProps={{
-                        "aria-labelledby": "long-button",
-                      }}
-                      anchorEl={anchorEl}
-                      open={open}
-                      onClose={handleClose}
-                      PaperProps={{
-                        style: {
-                          maxHeight: ITEM_HEIGHT * 4.5,
-                          width: "20ch",
-                        },
+                    <Button>
+                      <AddIcon />
+                    </Button>
+                  </TableCell>
+                  <TableCell>
+                    <Button
+                      onClick={(event) => {
+                        handleDeleteOperation(event, users.id);
+                        console.log("id is " + users.id);
                       }}
                     >
-                      {options.map((option) => (
-                        <MenuItem
-                          key={option}
-                          selected={option === "Add"}
-                          onClick={() => handleMenuItemClick(option)}
-                        >
-                          {option}
-                        </MenuItem>
-                      ))}
-                    </Menu>
+                      <DeleteIcon />
+                    </Button>
                   </TableCell>
                 </TableRow>
               ))}
