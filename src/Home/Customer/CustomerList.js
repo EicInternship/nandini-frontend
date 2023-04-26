@@ -16,13 +16,13 @@ import { UserService } from "../../service/UserService";
 import React from "react";
 import { useFormik } from "formik";
 import Button from "@mui/material/Button";
-import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { Link, Routes, useNavigate } from "react-router-dom";
 import { Route } from "react-router-dom";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { orange } from "@mui/material/colors";
 import PersonAddAlt1Icon from "@mui/icons-material/PersonAddAlt1";
+import EditIcon from "@mui/icons-material/Edit";
 
 const Customer = () => {
   const [user, setUser] = useState([]);
@@ -101,6 +101,9 @@ const Customer = () => {
   const handleDeleteOperation = (event, id) => {
     console.log("ID IS:" + id);
     navigate("/Delete", { state: { id } });
+  };
+  const handleUpdateOperation = (event, user) => {
+    navigate("/Update", { state: { user } });
   };
 
   return (
@@ -190,8 +193,15 @@ const Customer = () => {
                   <TableCell>{users.country}</TableCell>
                   <TableCell>{users.userType}</TableCell>
                   <TableCell>
-                    <Button>
-                      <AddIcon />
+                    <Button
+                      onClick={(event) => {
+                        handleUpdateOperation(event, users);
+                        console.log(users.id);
+                        console.log(users.firstName);
+                        console.log(users.lastName);
+                      }}
+                    >
+                      <EditIcon style={{ color: "black" }} />
                     </Button>
                   </TableCell>
                   <TableCell>
@@ -201,7 +211,7 @@ const Customer = () => {
                         console.log("id is " + users.id);
                       }}
                     >
-                      <DeleteIcon />
+                      <DeleteIcon style={{ color: "black" }} />
                     </Button>
                   </TableCell>
                 </TableRow>

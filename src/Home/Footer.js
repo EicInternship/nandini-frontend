@@ -52,7 +52,7 @@ const iconHoverStyle = {
   backgroundColor: "orange",
 };
 
-export default function Footer() {
+const Footer = () => {
   return (
     <div style={{ width: "100%" }}>
       <div style={div1Style}></div>
@@ -74,4 +74,5 @@ export default function Footer() {
       </div>
     </div>
   );
-}
+};
+export default Footer;

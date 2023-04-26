@@ -16,7 +16,7 @@ import {
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import Typography from "@mui/material/Typography";
 
-const SignupPage = () => {
+const AddCustomer = () => {
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -218,4 +218,4 @@ const SignupPage = () => {
   );
 };
 
-export default SignupPage;
+export default AddCustomer;

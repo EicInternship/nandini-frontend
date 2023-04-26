@@ -40,11 +40,11 @@ import { Order } from "./Order";
 import { Catalog } from "./Catalog";
 import { ErrorPage } from "./error/ErrorPage";
 import ReportGmailerrorredRoundedIcon from "@mui/icons-material/ReportGmailerrorredRounded";
-import { Admin } from "../component/Admin";
+import Admin from "../component/Admin";
 import AddCustomer from "./customer/AddCustomer";
-//import { DeleteCustomer } from "./customer/DeleteCustomer";
 import DeleteCustomer from "./customer/DeleteCustomer";
-import { UpdateCustomer } from "./customer/UpdateCustomer";
+import UpdateCustomer from "./customer/UpdateCustomer";
+import App from "../App";
 
 const drawerWidth = 250;
 
@@ -381,7 +381,7 @@ const Home = () => {
       </Main>
       <Box component="main" sx={{ flexGrow: 12, p: 12 }}>
         <Typography>
-          <Routes>
+           <Routes>
             <Route path="/" element={<DashboardPage />} />
             <Route path="/SignupPage" element={<SignupPage />} />
             <Route path="/Admin" element={<Admin />} />
@@ -397,7 +397,8 @@ const Home = () => {
             <Route path="/Delete" element={<DeleteCustomer />} />
             <Route path="/Update" element={<UpdateCustomer />} />
             <Route path="/CustomerList" element={<CustomerList />} />
-          </Routes>
+          </Routes> 
+          {/* <App/> */}
         </Typography>
       </Box>
     </Box>

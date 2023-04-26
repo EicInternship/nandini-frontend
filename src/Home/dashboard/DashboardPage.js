@@ -2,7 +2,7 @@ import PropTypes from "prop-types";
 import ArrowDownIcon from "@heroicons/react/24/solid/ArrowDownIcon";
 import ArrowUpIcon from "@heroicons/react/24/solid/ArrowUpIcon";
 import UsersIcon from "@heroicons/react/24/solid/UsersIcon";
-import React from "react"
+import React from "react";
 
 import {
   Avatar,
@@ -22,6 +22,14 @@ export const DashboardPage = (props) => {
   useEffect(() => {
     UserService.getEmail().then((res) => setUserEmail(res.data));
   }, []);
+  // useEffect(() => {
+  //   UserService.getEmail().then((res) => {
+  //     if (res && res.data) {
+  //       setUserEmail(res.data);
+  //     }
+  //   });
+  // }, []);
+
   return (
     <Card sx={sx}>
       <CardContent>

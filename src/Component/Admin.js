@@ -5,7 +5,7 @@ import Typography from "@mui/material/Typography";
 import MoodIcon from "@mui/icons-material/Mood";
 import MoodBadIcon from "@mui/icons-material/MoodBad";
 
-export const Admin = () => {
+const Admin = () => {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -55,7 +55,7 @@ export const Admin = () => {
     >
       <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>{emoji}</Avatar>
       <Typography component="h1" variant="h5">
-       ADMIN LOGIN
+        ADMIN LOGIN
       </Typography>
       <form onSubmit={handleSubmit} sx={{ mt: 1 }}>
         <Grid container spacing={2} alignItems="center" justifyContent="center">
@@ -105,3 +105,4 @@ export const Admin = () => {
     </Box>
   );
 };
+export default Admin;
