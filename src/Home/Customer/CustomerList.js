@@ -42,8 +42,20 @@ const Customer = () => {
     setPage(0);
   };
 
+  // useEffect(() => {
+  //   UserService.getUser().then((res) => setUser(res.data));
+  // }, []);
+
   useEffect(() => {
-    UserService.getUser().then((res) => setUser(res.data));
+    UserService.getUser().then((res) => {
+      const updatedUsers = res.data.map((user) => {
+        return {
+          ...user,
+          active: Math.random() > 0.5 ? "Active" : "Inactive",
+        };
+      });
+      setUser(updatedUsers);
+    });
   }, []);
 
   const filteredData = user.filter(
@@ -165,46 +177,60 @@ const Customer = () => {
           <Table aria-label="customer table">
             <TableHead>
               <TableRow>
-                <TableCell>
+                {/* <TableCell>
                   <ThemeProvider theme={innerTheme}>
                     <Checkbox />
                   </ThemeProvider>
-                </TableCell>
-                <TableCell sx={{ fontWeight: "bold" }}>Id</TableCell>
-                <TableCell sx={{ fontWeight: "bold" }}>Name</TableCell>
-                <TableCell sx={{ fontWeight: "bold" }}>Registered</TableCell>
-                <TableCell sx={{ fontWeight: "bold" }}>Country</TableCell>
-                <TableCell sx={{ fontWeight: "bold" }}>Group</TableCell>
+                </TableCell> */}
+                <TableCell sx={{ fontWeight: "bold",fontSize: '16px' }}>Id</TableCell>
+                <TableCell sx={{ fontWeight: "bold",fontSize: '16px' }}>Name</TableCell>
+                <TableCell sx={{ fontWeight: "bold" ,fontSize: '16px'}}>Registered</TableCell>
+                <TableCell sx={{ fontWeight: "bold" ,fontSize: '16px'}}>Country</TableCell>
+                <TableCell sx={{ fontWeight: "bold" ,fontSize: '16px'}}>Group</TableCell>
+                <TableCell sx={{ fontWeight: "bold" ,fontSize: '16px'}}>Status</TableCell>
+                <TableCell sx={{ fontWeight: "bold" ,fontSize: '16px'}}>Edit</TableCell>
+                <TableCell sx={{ fontWeight: "bold",fontSize: '16px' }}>Delete</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {visibleData.map((users) => (
                 <TableRow key={users.email}>
-                  <TableCell>
+                  {/* <TableCell>
                     <ThemeProvider theme={innerTheme}>
                       <Checkbox />
                     </ThemeProvider>
+                  </TableCell> */}
+                  <TableCell sx={{ fontSize: '16px' }}>{users.id}</TableCell>
+                  <TableCell sx={{ fontSize: '16px' }}>
+                    <Link style={{color:"black"}}
+                      to={{
+                        pathname: `/CustomerDetail/${users.id}`,
+                      }}
+                    >
+                      {users.firstName} {users.lastName}
+                    </Link>
                   </TableCell>
-                  <TableCell>{users.id}</TableCell>
-                  <TableCell>
-                    {users.firstName + " " + users.lastName}
+
+                  <TableCell sx={{ fontSize: '16px' }} >{users.signupDate}</TableCell>
+                  <TableCell sx={{ fontSize: '16px' }}>{users.country}</TableCell>
+                  <TableCell sx={{ fontSize: '16px' }}>{users.userType}</TableCell>
+                  <TableCell sx={{ fontWeight: "bold",fontSize: '16px' }}
+                    style={{
+                      color: users.active === "Active" ? "green" : "red",
+                    }}
+                  >
+                    {users.active}
                   </TableCell>
-                  <TableCell>{users.signupDate}</TableCell>
-                  <TableCell>{users.country}</TableCell>
-                  <TableCell>{users.userType}</TableCell>
-                  <TableCell>
+                  <TableCell sx={{ fontSize: '16px' }}>
                     <Button
                       onClick={(event) => {
                         handleUpdateOperation(event, users);
-                        console.log(users.id);
-                        console.log(users.firstName);
-                        console.log(users.lastName);
                       }}
                     >
                       <EditIcon style={{ color: "black" }} />
                     </Button>
                   </TableCell>
-                  <TableCell>
+                  <TableCell sx={{ fontSize: '16px' }}>
                     <Button
                       onClick={(event) => {
                         handleDeleteOperation(event, users.id);

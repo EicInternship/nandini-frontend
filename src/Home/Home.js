@@ -44,6 +44,7 @@ import Admin from "../component/Admin";
 import AddCustomer from "./customer/AddCustomer";
 import DeleteCustomer from "./customer/DeleteCustomer";
 import UpdateCustomer from "./customer/UpdateCustomer";
+import CustomerDetail from "./customer/CustomerDetail";
 import App from "../App";
 
 const drawerWidth = 250;
@@ -381,7 +382,7 @@ const Home = () => {
       </Main>
       <Box component="main" sx={{ flexGrow: 12, p: 12 }}>
         <Typography>
-           <Routes>
+          <Routes>
             <Route path="/" element={<DashboardPage />} />
             <Route path="/SignupPage" element={<SignupPage />} />
             <Route path="/Admin" element={<Admin />} />
@@ -397,7 +398,9 @@ const Home = () => {
             <Route path="/Delete" element={<DeleteCustomer />} />
             <Route path="/Update" element={<UpdateCustomer />} />
             <Route path="/CustomerList" element={<CustomerList />} />
-          </Routes> 
+            <Route path="/CustomerDetail/:id" element={<CustomerDetail />} />
+            {/* <Route path="/CustomerDetail/:id" element={<CustomerDetail />} /> */}
+          </Routes>
           {/* <App/> */}
         </Typography>
       </Box>
