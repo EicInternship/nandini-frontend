@@ -46,6 +46,8 @@ import DeleteCustomer from "./customer/DeleteCustomer";
 import UpdateCustomer from "./customer/UpdateCustomer";
 import CustomerDetail from "./customer/CustomerDetail";
 import App from "../App";
+import { ProductList } from "./product/ProductList";
+import UserList from "./customer/UserList";
 
 const drawerWidth = 250;
 
@@ -165,6 +167,7 @@ const Home = () => {
   const [open, setOpen] = useState(false);
   const [customerListOpen, setCustomerListOpen] = useState(false);
   const [errorListOpen, setErrorListOpen] = useState(false);
+  const [catalogListOpen, setCatalogListOpen] = useState(false);
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -177,6 +180,9 @@ const Home = () => {
   };
   const handleErrorClick = () => {
     setErrorListOpen(!errorListOpen);
+  };
+  const handleCatalogClick = () => {
+    setCatalogListOpen(!catalogListOpen);
   };
 
   return (
@@ -285,12 +291,6 @@ const Home = () => {
               <b>Admin</b>
             </Button>
           </Link>
-          {/* <img
-            src={logo}
-            sx={{ flexGrow: 1 }}
-            alt="logo"
-            style={{ height: "40px", marginRight: "10px" }}
-          /> */}
           <IconButton onClick={handleDrawerClose}>
             {theme.direction === "ltr" ? (
               <ChevronLeftIcon />
@@ -307,12 +307,23 @@ const Home = () => {
             </ListItemIcon>
             <ListItemText primary="Dashboard" />
           </ListItemButton>
-          <ListItemButton component={Link} to="/Catalog">
+          <ListItemButton onClick={handleCatalogClick}>
             <ListItemIcon>
               <StyledLaptopMacIcon />
             </ListItemIcon>
             <ListItemText primary="Catalog" />
+            {catalogListOpen ? <ExpandLess /> : <ExpandMore />}
           </ListItemButton>
+          <Collapse in={catalogListOpen} timeout="auto" unmountOnExit>
+            <List component="div" disablePadding>
+              <ListItemButton sx={{ pl: 4 }} component={Link} to="ProductList">
+                <ListItemIcon>
+                  <StyledCustomerIcon />
+                </ListItemIcon>
+                <ListItemText primary="Product List" />
+              </ListItemButton>
+            </List>
+          </Collapse>
 
           <ListItemButton onClick={handleCustomerClick}>
             <ListItemIcon>
@@ -323,12 +334,13 @@ const Home = () => {
           </ListItemButton>
           <Collapse in={customerListOpen} timeout="auto" unmountOnExit>
             <List component="div" disablePadding>
-              <ListItemButton
-                sx={{ pl: 4 }}
-                component={Link}
-                to="Customer/CustomerList"
-              >
-                {/* onClick={handleDrawerClose} */}
+              <ListItemButton sx={{ pl: 4 }} component={Link} to="UserList">
+                <ListItemIcon>
+                  <StyledCustomerIcon />
+                </ListItemIcon>
+                <ListItemText primary="User List" />
+              </ListItemButton>
+              <ListItemButton sx={{ pl: 4 }} component={Link} to="CustomerList">
                 <ListItemIcon>
                   <StyledCustomerIcon />
                 </ListItemIcon>
@@ -397,11 +409,11 @@ const Home = () => {
             <Route path="/Add" element={<AddCustomer />} />
             <Route path="/Delete" element={<DeleteCustomer />} />
             <Route path="/Update" element={<UpdateCustomer />} />
+            <Route path="/UserList" element={<UserList />} />
             <Route path="/CustomerList" element={<CustomerList />} />
             <Route path="/CustomerDetail/:id" element={<CustomerDetail />} />
-            {/* <Route path="/CustomerDetail/:id" element={<CustomerDetail />} /> */}
+            <Route path="/ProductList" element={<ProductList />} />
           </Routes>
-          {/* <App/> */}
         </Typography>
       </Box>
     </Box>

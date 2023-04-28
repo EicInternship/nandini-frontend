@@ -24,7 +24,7 @@ import { orange } from "@mui/material/colors";
 import PersonAddAlt1Icon from "@mui/icons-material/PersonAddAlt1";
 import EditIcon from "@mui/icons-material/Edit";
 
-const CustomerList = () => {
+const UserList = () => {
   const [user, setUser] = useState([]);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
@@ -42,8 +42,12 @@ const CustomerList = () => {
     setPage(0);
   };
 
+  // useEffect(() => {
+  //   UserService.getUser().then((res) => setUser(res.data));
+  // }, []);
+
   useEffect(() => {
-    UserService.getCustomer().then((res) => {
+    UserService.getUser().then((res) => {
       const updatedUsers = res.data.map((user) => {
         return {
           ...user,
@@ -174,48 +178,26 @@ const CustomerList = () => {
             <TableHead>
               <TableRow>
                 {/* <TableCell>
-                    <ThemeProvider theme={innerTheme}>
-                      <Checkbox />
-                    </ThemeProvider>
-                  </TableCell> */}
-                <TableCell sx={{ fontWeight: "bold", fontSize: "16px" }}>
-                  Id
-                </TableCell>
-                <TableCell sx={{ fontWeight: "bold", fontSize: "16px" }}>
-                  Name
-                </TableCell>
-                <TableCell sx={{ fontWeight: "bold", fontSize: "16px" }}>
-                  Registered
-                </TableCell>
-                <TableCell sx={{ fontWeight: "bold", fontSize: "16px" }}>
-                  Country
-                </TableCell>
-                <TableCell sx={{ fontWeight: "bold", fontSize: "16px" }}>
-                  Group
-                </TableCell>
-                <TableCell sx={{ fontWeight: "bold", fontSize: "16px" }}>
-                  Status
-                </TableCell>
-                <TableCell sx={{ fontWeight: "bold", fontSize: "16px" }}>
-                  Edit
-                </TableCell>
-                <TableCell sx={{ fontWeight: "bold", fontSize: "16px" }}>
-                  Delete
-                </TableCell>
+                  <ThemeProvider theme={innerTheme}>
+                    <Checkbox />
+                  </ThemeProvider>
+                </TableCell> */}
+                <TableCell sx={{ fontWeight: "bold",fontSize: '16px' }}>Id</TableCell>
+                <TableCell sx={{ fontWeight: "bold",fontSize: '16px' }}>Name</TableCell>
+                <TableCell sx={{ fontWeight: "bold" ,fontSize: '16px'}}>Registered</TableCell>
+                <TableCell sx={{ fontWeight: "bold" ,fontSize: '16px'}}>Country</TableCell>
+                <TableCell sx={{ fontWeight: "bold" ,fontSize: '16px'}}>Group</TableCell>
+                <TableCell sx={{ fontWeight: "bold" ,fontSize: '16px'}}>Status</TableCell>
+                <TableCell sx={{ fontWeight: "bold" ,fontSize: '16px'}}>Edit</TableCell>
+                <TableCell sx={{ fontWeight: "bold",fontSize: '16px' }}>Delete</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {visibleData.map((users) => (
                 <TableRow key={users.email}>
-                  {/* <TableCell>
-                      <ThemeProvider theme={innerTheme}>
-                        <Checkbox />
-                      </ThemeProvider>
-                    </TableCell> */}
-                  <TableCell sx={{ fontSize: "16px" }}>{users.id}</TableCell>
-                  <TableCell sx={{ fontSize: "16px" }}>
-                    <Link
-                      style={{ color: "black" }}
+                  <TableCell sx={{ fontSize: '16px' }}>{users.id}</TableCell>
+                  <TableCell sx={{ fontSize: '16px' }}>
+                    <Link style={{color:"black"}}
                       to={{
                         pathname: `/CustomerDetail/${users.id}`,
                       }}
@@ -224,24 +206,17 @@ const CustomerList = () => {
                     </Link>
                   </TableCell>
 
-                  <TableCell sx={{ fontSize: "16px" }}>
-                    {users.signupDate}
-                  </TableCell>
-                  <TableCell sx={{ fontSize: "16px" }}>
-                    {users.country}
-                  </TableCell>
-                  <TableCell sx={{ fontSize: "16px" }}>
-                    {users.userType}
-                  </TableCell>
-                  <TableCell
-                    sx={{ fontWeight: "bold", fontSize: "16px" }}
+                  <TableCell sx={{ fontSize: '16px' }} >{users.signupDate}</TableCell>
+                  <TableCell sx={{ fontSize: '16px' }}>{users.country}</TableCell>
+                  <TableCell sx={{ fontSize: '16px' }}>{users.userType}</TableCell>
+                  <TableCell sx={{ fontWeight: "bold",fontSize: '16px' }}
                     style={{
                       color: users.active === "Active" ? "green" : "red",
                     }}
                   >
                     {users.active}
                   </TableCell>
-                  <TableCell sx={{ fontSize: "16px" }}>
+                  <TableCell sx={{ fontSize: '16px' }}>
                     <Button
                       onClick={(event) => {
                         handleUpdateOperation(event, users);
@@ -250,7 +225,7 @@ const CustomerList = () => {
                       <EditIcon style={{ color: "black" }} />
                     </Button>
                   </TableCell>
-                  <TableCell sx={{ fontSize: "16px" }}>
+                  <TableCell sx={{ fontSize: '16px' }}>
                     <Button
                       onClick={(event) => {
                         handleDeleteOperation(event, users.id);
@@ -279,4 +254,4 @@ const CustomerList = () => {
   );
 };
 
-export default CustomerList;
+export default UserList;

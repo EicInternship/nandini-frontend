@@ -18,13 +18,24 @@ import { useLocation } from "react-router";
 // import Typography from "@mui/material/Typography";
 
 const UpdateCustomer = () => {
+  // const [formData, setFormData] = useState({
+  //   firstName: "",
+  //   lastName: "",
+  //   email: "",
+  //   password: "",
+  //   country: "",
+  //   userType: "",
+  // });
+  const location = useLocation();
+  const { user } = location.state;
+  
   const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-    password: "",
-    country: "",
-    userType: "",
+    firstName: user.firstName,
+    lastName: user.lastName,
+    email: user.email,
+    password: user.password,
+    country: user.country,
+    userType: user.userType,
   });
   const [message, setMessage] = useState("");
 
@@ -60,9 +71,6 @@ const UpdateCustomer = () => {
       setMessage("Error Updating User");
     }
   };
-
-  const location = useLocation();
-  const { user } = location.state;
 
   return (
     <Box

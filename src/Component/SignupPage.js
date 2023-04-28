@@ -23,6 +23,7 @@ const SignupPage = () => {
     email: "",
     password: "",
     country: "",
+    phoneno:"",
     userType: "",
   });
   const [message, setMessage] = useState("");
@@ -67,6 +68,7 @@ const SignupPage = () => {
             email: "",
             password: "",
             userType: "",
+            phoneno:"",
             country: "",
           });
           setPassword("");
@@ -82,6 +84,7 @@ const SignupPage = () => {
             email: "",
             password: "",
             userType: "",
+            phoneno:"",
             country: "",
           });
           setPassword("");
@@ -171,6 +174,18 @@ const SignupPage = () => {
               label="Country"
               name="country"
               value={formData.country}
+              onChange={handleChange}
+              margin="normal"
+              required
+              fullWidth
+              sx={{ my: 0 }}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <TextField
+              label="phoneno"
+              name="phoneno"
+              value={formData.phoneno}
               onChange={handleChange}
               margin="normal"
               required
