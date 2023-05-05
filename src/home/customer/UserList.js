@@ -192,7 +192,7 @@ const UserList = () => {
                   Registered
                 </TableCell>
                 <TableCell sx={{ fontWeight: "bold", fontSize: "16px" }}>
-                  Hani's Data
+                  Role
                 </TableCell>
                 <TableCell sx={{ fontWeight: "bold", fontSize: "16px" }}>
                   Country
