@@ -28,7 +28,7 @@ const UpdateCustomer = () => {
   // });
   const location = useLocation();
   const { user } = location.state;
-  
+
   const [formData, setFormData] = useState({
     firstName: user.firstName,
     lastName: user.lastName,
@@ -53,10 +53,13 @@ const UpdateCustomer = () => {
   const handleSubmit = async () => {
     try {
       console.log(formData);
-      const response = await axios.post(`http://localhost:8080/updateuser`, {
-        ...formData,
-        id: user.id,
-      });
+      const response = await axios.post(
+        `http://localhost:8080/payment/updateuser`,
+        {
+          ...formData,
+          id: user.id,
+        }
+      );
       setMessage("Updated User Successfully");
       setFormData({
         firstName: "",
@@ -177,7 +180,10 @@ const UpdateCustomer = () => {
               <b>Update Customer</b>
             </Button>
 
-            <Link href="CustomerList" variant="body2">
+            <Link
+              to={{ pathname: "CustomerList", state: { replace: true } }}
+              variant="body2"
+            >
               <LoginIcon fontSize="large" style={{ color: "#9C27B0" }} />
             </Link>
           </Grid>

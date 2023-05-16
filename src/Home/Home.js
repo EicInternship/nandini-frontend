@@ -45,10 +45,23 @@ import AddCustomer from "./customer/AddCustomer";
 import DeleteCustomer from "./customer/DeleteCustomer";
 import UpdateCustomer from "./customer/UpdateCustomer";
 import CustomerDetail from "./customer/CustomerDetail";
-import App from "../App";
-import { ProductList } from "./product/ProductList";
+import { useContext } from "react";
 import UserList from "./customer/UserList";
-
+import ProductCard from "../component/product/ProductCard";
+import Product from "../component/product/Product";
+import Category from "../component/Category";
+import Productdetails from "../component/product/Productdetails";
+import CartContext from "../context/CartContex";
+import Badge from "@mui/material/Badge";
+import { ImDatabase } from "react-icons/im";
+import { AiFillDashboard } from "react-icons/ai";
+import { BsFillHeartFill } from "react-icons/bs";
+import { useAuth } from "../component/auth";
+import Cart from "../component/product/Cart";
+import Avatar from "@mui/material/Avatar";
+import Stack from "@mui/material/Stack";
+import { useNavigate } from "react-router-dom";
+import { replace } from "formik";
 const drawerWidth = 250;
 
 const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })(
@@ -108,14 +121,46 @@ const DrawerHeader = styled("div")(({ theme }) => ({
   ...theme.mixins.toolbar,
   justifyContent: "flex-end",
 }));
-const StyledDashboardIcon = styled(DashboardIcon)({
+
+function stringToColor(string) {
+  let hash = 0;
+  let i;
+
+  /* eslint-disable no-bitwise */
+  for (i = 0; i < string.length; i += 1) {
+    hash = string.charCodeAt(i) + ((hash << 5) - hash);
+  }
+
+  let color = "#";
+
+  for (i = 0; i < 3; i += 1) {
+    const value = (hash >> (i * 8)) & 0xff;
+    color += `00${value.toString(16)}`.slice(-2);
+  }
+  return color;
+}
+
+function stringAvatar(name) {
+  return {
+    sx: {
+      bgcolor: stringToColor(name),
+    },
+    children: `${name.split(" ")[0][0]}${name.split(" ")[1][0]}`,
+  };
+}
+
+const StyledDashboardIcon = styled(AiFillDashboard)({
   color: "black",
+  fontSize: "x-large",
+
   "&:hover": {
     color: "#004280",
   },
 });
-const StyledLaptopMacIcon = styled(LaptopMacIcon)({
+const StyledLaptopMacIcon = styled(ImDatabase)({
   color: "black",
+  fontSize: "large",
+  marginLeft: "2px",
   "&:hover": {
     color: "#004280",
   },
@@ -128,6 +173,7 @@ const StyledCustomerIcon = styled(PeopleAltIcon)({
 });
 const StyledPersonIcon = styled(Person3Icon)({
   color: "black",
+  marginLeft: "-1px",
   "&:hover": {
     color: "#004280",
   },
@@ -138,8 +184,10 @@ const StyledshoppingCart = styled(ShoppingCartIcon)({
     color: "#004280",
   },
 });
-const StyledFavoriteBorderOutlined = styled(FavoriteBorderOutlinedIcon)({
+const StyledFavoriteBorderOutlined = styled(BsFillHeartFill)({
   color: "black",
+  fontSize: "larger",
+  marginLeft: "1px",
   "&:hover": {
     color: "#004280",
   },
@@ -162,12 +210,28 @@ const StyledError1Icon = styled(ReportGmailerrorredRoundedIcon)({
     color: "#004280",
   },
 });
+const StyledBadge = styled(Badge)(({ theme }) => ({
+  "& .MuiBadge-badge": {
+    right: -3,
+    top: 13,
+    border: `2px solid ${theme.palette.background.paper}`,
+    padding: "0 4px",
+    backgroundColor: "white", // set background color to white
+    color: "black", // set text color to black
+  },
+}));
 const Home = () => {
   const theme = useTheme();
   const [open, setOpen] = useState(false);
   const [customerListOpen, setCustomerListOpen] = useState(false);
   const [errorListOpen, setErrorListOpen] = useState(false);
   const [catalogListOpen, setCatalogListOpen] = useState(false);
+  const { totalItems } = useContext(CartContext);
+  const auth = useAuth();
+  const navigate = useNavigate();
+  const handleProfile = () => {
+    navigate("/Inbox");
+  };
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -205,7 +269,7 @@ const Home = () => {
             edge="start"
             sx={{ mr: 2, ...(open && { display: "none" }) }}
           >
-            <MenuIcon />
+            <MenuIcon style={{ color: "#FFA500" }} />
           </IconButton>
           <Typography
             variant="h5"
@@ -224,7 +288,7 @@ const Home = () => {
             style={{ backgroundColor: "black" }}
           ></Typography>
           <br />
-          <Link to="/SignupPage">
+          <Link to={{ pathname: "/SignupPage", state: { replace: true } }}>
             <Button
               variant="outlined"
               className="btn"
@@ -241,7 +305,7 @@ const Home = () => {
               <b>Signup</b>
             </Button>
           </Link>
-          <Link to="/LoginPage">
+          <Link to={{ pathname: "/LoginPage", state: { replace: true } }}>
             <Button
               variant="outlined"
               className="btn"
@@ -258,6 +322,20 @@ const Home = () => {
               <b>Login</b>
             </Button>
           </Link>
+
+          <IconButton
+            aria-label="cart"
+            sx={{ marginLeft: "10px" }}
+            component={Link}
+            to={{ pathname: "/Cart", state: { replace: true } }}
+          >
+            <StyledBadge badgeContent={totalItems} color="secondary">
+              <ShoppingCartIcon style={{ color: "#FFA500" }} />
+            </StyledBadge>
+          </IconButton>
+          <Stack direction="row" spacing={2}>
+            <Avatar {...stringAvatar("Nandini Gondaliya")} onClick={handleProfile} />
+          </Stack>
         </Toolbar>
       </AppBar>
       <Drawer
@@ -274,7 +352,7 @@ const Home = () => {
         open={open}
       >
         <DrawerHeader style={{ backgroundColor: "#FFA500" }}>
-          <Link to="/Admin">
+          <Link to={{ pathname: "/Admin", state: { replace: true } }}>
             <Button
               variant="outlined"
               className="btn"
@@ -301,12 +379,16 @@ const Home = () => {
         </DrawerHeader>
         <Divider />
         <List>
-          <ListItemButton component={Link} to="/DashboardPage">
+          <ListItemButton
+            component={Link}
+            to={{ pathname: "/DashboardPage", state: { replace: true } }}
+          >
             <ListItemIcon>
               <StyledDashboardIcon />
             </ListItemIcon>
             <ListItemText primary="Dashboard" />
           </ListItemButton>
+
           <ListItemButton onClick={handleCatalogClick}>
             <ListItemIcon>
               <StyledLaptopMacIcon />
@@ -316,11 +398,35 @@ const Home = () => {
           </ListItemButton>
           <Collapse in={catalogListOpen} timeout="auto" unmountOnExit>
             <List component="div" disablePadding>
-              <ListItemButton sx={{ pl: 4 }} component={Link} to="ProductList">
+              <ListItemButton
+                sx={{ pl: 4 }}
+                component={Link}
+                to={{ pathname: "ProductCard", state: { replace: true } }}
+              >
                 <ListItemIcon>
                   <StyledCustomerIcon />
                 </ListItemIcon>
                 <ListItemText primary="Product List" />
+              </ListItemButton>
+              <ListItemButton
+                sx={{ pl: 4 }}
+                component={Link}
+                to={{ pathname: "Product", state: { replace: true } }}
+              >
+                <ListItemIcon>
+                  <StyledCustomerIcon />
+                </ListItemIcon>
+                <ListItemText primary="Add Product" />
+              </ListItemButton>
+              <ListItemButton
+                sx={{ pl: 4 }}
+                component={Link}
+                to={{ pathname: "Category", state: { replace: true } }}
+              >
+                <ListItemIcon>
+                  <StyledCustomerIcon />
+                </ListItemIcon>
+                <ListItemText primary="Add Category" />
               </ListItemButton>
             </List>
           </Collapse>
@@ -334,13 +440,21 @@ const Home = () => {
           </ListItemButton>
           <Collapse in={customerListOpen} timeout="auto" unmountOnExit>
             <List component="div" disablePadding>
-              <ListItemButton sx={{ pl: 4 }} component={Link} to="UserList">
+              <ListItemButton
+                sx={{ pl: 4 }}
+                component={Link}
+                to={{ pathname: "UserList", state: { replace: true } }}
+              >
                 <ListItemIcon>
                   <StyledCustomerIcon />
                 </ListItemIcon>
                 <ListItemText primary="User List" />
               </ListItemButton>
-              <ListItemButton sx={{ pl: 4 }} component={Link} to="CustomerList">
+              <ListItemButton
+                sx={{ pl: 4 }}
+                component={Link}
+                to={{ pathname: "CustomerList", state: { replace: true } }}
+              >
                 <ListItemIcon>
                   <StyledCustomerIcon />
                 </ListItemIcon>
@@ -348,21 +462,30 @@ const Home = () => {
               </ListItemButton>
             </List>
           </Collapse>
-          <ListItemButton component={Link} to="/Marketing">
+          <ListItemButton
+            component={Link}
+            to={{ pathname: "/Marketing", state: { replace: true } }}
+          >
             <ListItemIcon>
               <StyledFavoriteBorderOutlined />
             </ListItemIcon>
 
             <ListItemText primary="Marketing" />
           </ListItemButton>
-          <ListItemButton component={Link} to="/Order">
+          <ListItemButton
+            component={Link}
+            to={{ pathname: "/Order", state: { replace: true } }}
+          >
             <ListItemIcon>
               <StyledshoppingCart />
             </ListItemIcon>
 
             <ListItemText primary="Orders" />
           </ListItemButton>
-          <ListItemButton component={Link} to="/Inbox">
+          <ListItemButton
+            component={Link}
+            to={{ pathname: "/Inbox", state: { replace: true } }}
+          >
             <ListItemIcon>
               <StyledMailIcon />
             </ListItemIcon>
@@ -379,7 +502,11 @@ const Home = () => {
           </ListItemButton>
           <Collapse in={errorListOpen} timeout="auto" unmountOnExit>
             <List component="div" disablePadding>
-              <ListItemButton sx={{ pl: 4 }} component={Link} to="ErrorPage">
+              <ListItemButton
+                sx={{ pl: 4 }}
+                component={Link}
+                to={{ pathname: "ErrorPage", state: { replace: true } }}
+              >
                 <ListItemIcon>
                   <StyledError1Icon />
                 </ListItemIcon>
@@ -392,30 +519,36 @@ const Home = () => {
       <Main open={open}>
         <DrawerHeader />
       </Main>
-      <Box component="main" sx={{ flexGrow: 12, p: 12 }}>
+      {/* <Box component="main" sx={{ flexGrow: 12, p: 12 }}>
         <Typography>
-          <Routes>
-            <Route path="/" element={<DashboardPage />} />
-            <Route path="/SignupPage" element={<SignupPage />} />
-            <Route path="/Admin" element={<Admin />} />
-            <Route path="/LoginPage" element={<LoginPage />} />
-            <Route path="Customer/CustomerList" element={<CustomerList />} />
-            <Route path="/Catalog" element={<Catalog />} />
-            <Route path="/Order" element={<Order />} />
-            <Route path="/Inbox" element={<Inbox />} />
-            <Route path="/Marketing" element={<Marketing />} />
-            <Route path="/DashboardPage" element={<DashboardPage />} />
-            <Route path="/*" element={<ErrorPage />} />
-            <Route path="/Add" element={<AddCustomer />} />
-            <Route path="/Delete" element={<DeleteCustomer />} />
-            <Route path="/Update" element={<UpdateCustomer />} />
-            <Route path="/UserList" element={<UserList />} />
-            <Route path="/CustomerList" element={<CustomerList />} />
-            <Route path="/CustomerDetail/:id" element={<CustomerDetail />} />
-            <Route path="/ProductList" element={<ProductList />} />
-          </Routes>
+          <AuthProvider>
+            <Routes>
+              <Route path="/" element={<DashboardPage />} />
+              <Route path="/SignupPage" element={<SignupPage />} />
+              <Route path="/Admin" element={<Admin />} />
+              <Route path="/LoginPage" element={<LoginPage />} />
+              <Route path="Customer/CustomerList" element={<CustomerList />} />
+              <Route path="/Catalog" element={<Catalog />} />
+              <Route path="/Order" element={<Order />} />
+              <Route path="/Inbox" element={<Inbox />} />
+              <Route path="/Marketing" element={<Marketing />} />
+              <Route path="/DashboardPage" element={<DashboardPage />} />
+              <Route path="/*" element={<ErrorPage />} />
+              <Route path="/Add" element={<AddCustomer />} />
+              <Route path="/Delete" element={<DeleteCustomer />} />
+              <Route path="/Update" element={<UpdateCustomer />} />
+              <Route path="/UserList" element={<UserList />} />
+              <Route path="/CustomerList" element={<CustomerList />} />
+              <Route path="/CustomerDetail/:id" element={<CustomerDetail />} />
+              <Route path="/ProductCard" element={<ProductCard />} />
+              <Route path="/Product" element={<Product />} />
+              <Route path="/Category" element={<Category />} />
+              <Route path="/productDetails/:id" element={<Productdetails />} />
+              <Route path="/Cart" element={<Cart />} />
+            </Routes>
+          </AuthProvider>
         </Typography>
-      </Box>
+      </Box> */}
     </Box>
   );
 };

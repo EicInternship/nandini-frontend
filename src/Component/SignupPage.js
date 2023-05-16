@@ -23,7 +23,7 @@ const SignupPage = () => {
     email: "",
     password: "",
     country: "",
-    phoneno:"",
+    phoneno: "",
     userType: "",
   });
   const [message, setMessage] = useState("");
@@ -58,7 +58,7 @@ const SignupPage = () => {
     if (passwordValid) {
       try {
         const checkUserResponse = await axios.get(
-          `http://localhost:8080/checkuser?email=${formData.email}`
+          `http://localhost:8080/payment/checkuser?email=${formData.email}`
         );
         if (checkUserResponse.data.exists) {
           setMessage("This email address is already registered.");
@@ -68,13 +68,13 @@ const SignupPage = () => {
             email: "",
             password: "",
             userType: "",
-            phoneno:"",
+            phoneno: "",
             country: "",
           });
           setPassword("");
         } else {
           const saveUserResponse = await axios.post(
-            "http://localhost:8080/saveuser",
+            "http://localhost:8080/payment/saveuser",
             formData
           );
           setMessage("You have successfully signed up.");
@@ -84,7 +84,7 @@ const SignupPage = () => {
             email: "",
             password: "",
             userType: "",
-            phoneno:"",
+            phoneno: "",
             country: "",
           });
           setPassword("");
@@ -222,7 +222,10 @@ const SignupPage = () => {
               <b>Signup</b>
             </Button>
 
-            <Link href="LoginPage" variant="body2">
+            <Link
+              to={{ pathname: "LoginPage", state: { replace: true } }}
+              variant="body2"
+            >
               <LoginIcon fontSize="large" style={{ color: "#9C27B0" }} />
             </Link>
           </Grid>

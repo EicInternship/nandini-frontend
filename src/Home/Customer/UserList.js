@@ -21,8 +21,10 @@ import { Link, Routes, useNavigate } from "react-router-dom";
 import { Route } from "react-router-dom";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { orange } from "@mui/material/colors";
-import PersonAddAlt1Icon from "@mui/icons-material/PersonAddAlt1";
+// import PersonAddAlt1Icon from "@mui/icons-material/PersonAddAlt1";
 import EditIcon from "@mui/icons-material/Edit";
+import { ImUserPlus } from "react-icons/im";
+import { Box } from "@mui/material";
 
 const UserList = () => {
   const [user, setUser] = useState([]);
@@ -152,7 +154,7 @@ const UserList = () => {
         <Button
           sx={{ fontWeight: "bold" }}
           component={Link}
-          to="/Add"
+          to={{ pathname: "/Add", state: { replace: true } }}
           size="small"
           variant="outlined"
           className="btn"
@@ -166,7 +168,8 @@ const UserList = () => {
             color: "black",
           }}
         >
-          <PersonAddAlt1Icon />
+          <ImUserPlus fontSize="20px" />
+          <Box sx={{ mx: 0.4 }} />
           <b> Customer</b>
         </Button>
       </div>
@@ -182,41 +185,74 @@ const UserList = () => {
                     <Checkbox />
                   </ThemeProvider>
                 </TableCell> */}
-                <TableCell sx={{ fontWeight: "bold",fontSize: '16px' }}>Id</TableCell>
-                <TableCell sx={{ fontWeight: "bold",fontSize: '16px' }}>Name</TableCell>
-                <TableCell sx={{ fontWeight: "bold" ,fontSize: '16px'}}>Registered</TableCell>
-                <TableCell sx={{ fontWeight: "bold" ,fontSize: '16px'}}>Country</TableCell>
-                <TableCell sx={{ fontWeight: "bold" ,fontSize: '16px'}}>Group</TableCell>
-                <TableCell sx={{ fontWeight: "bold" ,fontSize: '16px'}}>Status</TableCell>
-                <TableCell sx={{ fontWeight: "bold" ,fontSize: '16px'}}>Edit</TableCell>
-                <TableCell sx={{ fontWeight: "bold",fontSize: '16px' }}>Delete</TableCell>
+                <TableCell sx={{ fontWeight: "bold", fontSize: "16px" }}>
+                  Id
+                </TableCell>
+                <TableCell sx={{ fontWeight: "bold", fontSize: "16px" }}>
+                  Name
+                </TableCell>
+                <TableCell sx={{ fontWeight: "bold", fontSize: "16px" }}>
+                  Registered
+                </TableCell>
+                <TableCell sx={{ fontWeight: "bold", fontSize: "16px" }}>
+                  Role
+                </TableCell>
+                <TableCell sx={{ fontWeight: "bold", fontSize: "16px" }}>
+                  Country
+                </TableCell>
+                <TableCell sx={{ fontWeight: "bold", fontSize: "16px" }}>
+                  Group
+                </TableCell>
+                <TableCell sx={{ fontWeight: "bold", fontSize: "16px" }}>
+                  Status
+                </TableCell>
+                <TableCell sx={{ fontWeight: "bold", fontSize: "16px" }}>
+                  Spent
+                </TableCell>
+                <TableCell sx={{ fontWeight: "bold", fontSize: "16px" }}>
+                  Edit
+                </TableCell>
+                <TableCell sx={{ fontWeight: "bold", fontSize: "16px" }}>
+                  Delete
+                </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {visibleData.map((users) => (
                 <TableRow key={users.email}>
-                  <TableCell sx={{ fontSize: '16px' }}>{users.id}</TableCell>
-                  <TableCell sx={{ fontSize: '16px' }}>
-                    <Link style={{color:"black"}}
+                  <TableCell sx={{ fontSize: "16px" }}>{users.id}</TableCell>
+                  <TableCell sx={{ fontSize: "16px" }}>
+                    <Link
+                      style={{ color: "black", textDecoration: "none" }}
                       to={{
                         pathname: `/CustomerDetail/${users.id}`,
+                        state: { replace: true },
                       }}
                     >
                       {users.firstName} {users.lastName}
                     </Link>
                   </TableCell>
 
-                  <TableCell sx={{ fontSize: '16px' }} >{users.signupDate}</TableCell>
-                  <TableCell sx={{ fontSize: '16px' }}>{users.country}</TableCell>
-                  <TableCell sx={{ fontSize: '16px' }}>{users.userType}</TableCell>
-                  <TableCell sx={{ fontWeight: "bold",fontSize: '16px' }}
+                  <TableCell sx={{ fontSize: "16px" }}>
+                    {users.signupDate}
+                  </TableCell>
+                  <TableCell sx={{ fontSize: "16px" }}>{users.role}</TableCell>
+                  <TableCell sx={{ fontSize: "16px" }}>
+                    {users.country}
+                  </TableCell>
+                  <TableCell sx={{ fontSize: "16px" }}>
+                    {users.userType}
+                  </TableCell>
+                  <TableCell
+                    sx={{ fontWeight: "bold", fontSize: "16px" }}
                     style={{
                       color: users.active === "Active" ? "green" : "red",
                     }}
                   >
                     {users.active}
                   </TableCell>
-                  <TableCell sx={{ fontSize: '16px' }}>
+                  <TableCell sx={{ fontSize: "16px" }}>{users.spent}</TableCell>
+                  <TableCell sx={{ fontSize: "16px" }}>
                     <Button
                       onClick={(event) => {
                         handleUpdateOperation(event, users);
@@ -225,7 +261,7 @@ const UserList = () => {
                       <EditIcon style={{ color: "black" }} />
                     </Button>
                   </TableCell>
-                  <TableCell sx={{ fontSize: '16px' }}>
+                  <TableCell sx={{ fontSize: "16px" }}>
                     <Button
                       onClick={(event) => {
                         handleDeleteOperation(event, users.id);

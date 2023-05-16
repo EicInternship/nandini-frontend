@@ -12,7 +12,7 @@ const DeleteCustomer = () => {
 
     try {
       const response = await axios.get(
-        `http://localhost:8080/deleteuser?id=${id}`
+        `http://localhost:8080/payment/deleteuser?id=${id}`
       );
 
       if (response.status === 200) {
@@ -32,7 +32,7 @@ const DeleteCustomer = () => {
   return (
     <div>
       <h2>Delete Customer</h2>
-      <p>Are you sure you want to delete {id}?</p>
+      <p>Are you sure you want to delete Customer with id={id}?</p>
       <button onClick={(event) => handleDeleteClick(event, id)}>Delete</button>
     </div>
   );

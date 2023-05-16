@@ -29,7 +29,8 @@ const AddCustomer = () => {
   const [password, setPassword] = useState("");
 
   const validatePassword = (password) => {
-    const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    const regex =
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
     return regex.test(password);
   };
 
@@ -56,7 +57,7 @@ const AddCustomer = () => {
     if (passwordValid) {
       try {
         const checkUserResponse = await axios.get(
-          `http://localhost:8080/checkuser?email=${formData.email}`
+          `http://localhost:8080/payment/checkuser?email=${formData.email}`
         );
         if (checkUserResponse.data.exists) {
           setMessage("Customer is Already there,Plase Check Again");
@@ -71,7 +72,7 @@ const AddCustomer = () => {
           setPassword("");
         } else {
           const saveUserResponse = await axios.post(
-            "http://localhost:8080/saveuser",
+            "http://localhost:8080/payment/saveuser",
             formData
           );
           setMessage("Successfully Added User");
@@ -206,7 +207,10 @@ const AddCustomer = () => {
               <b>Add Customer</b>
             </Button>
 
-            <Link href="CustomerList" variant="body2">
+            <Link
+              to={{ pathname: "CustomerList", state: { replace: true } }}
+              variant="body2"
+            >
               <LoginIcon fontSize="large" style={{ color: "#9C27B0" }} />
             </Link>
           </Grid>

@@ -4,17 +4,24 @@ import { Button, TextField, Box, Grid, Avatar } from "@mui/material";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import MoodIcon from "@mui/icons-material/Mood";
-import React from "react"
+import React from "react";
+import jwtDecode from "jwt-decode";
+import { UserService } from "../service/UserService";
 import MoodBadIcon from "@mui/icons-material/MoodBad";
-
-
+import { useAuth } from "./auth";
+import { Link, useNavigate, useLocation } from "react-router-dom";
+import { replace } from "formik";
 const LoginPage = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const redirectPage = location.state?.path || "/ProductCard";
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
 
   const [message, setMessage] = useState("");
+  const auth = useAuth();
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -23,38 +30,38 @@ const LoginPage = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-
-    try {
-      const response = await axios.get(
-        `http://localhost:8080/validuser?email=${formData.email}&password=${formData.password}`
-      );
-
-      if (response.data.isValidUser) {
-        setMessage("Login successful!");
+    // auth.login(formData);
+    UserService.login(formData)
+      .then((res) => {
+        localStorage.setItem("jwt", res.data);
+        console.log(res.data);
+        console.log(jwtDecode(res.data).sub);
+        console.log(jwtDecode(res.data));
+        // alert(res.data);
+        auth.login(jwtDecode(res.data).sub);
+        console.log("succesful login");
+        setMessage("You Are Logged In");
+        navigate(redirectPage, { replace: true });
         setFormData({
           email: "",
           password: "",
         });
-      } else if (response.data.isEmailValid) {
-        setMessage("Password is incorrect. Please try again.");
-        setFormData({
-          password: "",
-        });
-      } else {
-        setMessage("Invalid credentials. Please sign up.");
-        setFormData({
-          email: "",
-          password: "",
-        });
-      }
-    } catch (error) {
-      setMessage("Error Occured");
-      setFormData({
-        email: "",
-        password: "",
+      })
+      .catch((error) => {
+        if (error.response.status === 403) {
+          setMessage("User is Not Found");
+          setFormData({
+            email: "",
+            password: "",
+          });
+        } else {
+          setMessage("Error Occured during Login");
+          setFormData({
+            email: "",
+            password: "",
+          });
+        }
       });
-      console.log(error);
-    }
   };
   const passwordLength = formData.password.length;
   let emoji = <LockOutlinedIcon />;
@@ -87,7 +94,9 @@ const LoginPage = () => {
               label="Email"
               name="email"
               value={formData.email}
-              onChange={handleChange}
+              onChange={(e) => {
+                handleChange(e, "email");
+              }}
               required
               sx={{ my: 3 }}
             />
@@ -98,7 +107,9 @@ const LoginPage = () => {
               label="Password"
               name="password"
               value={formData.password}
-              onChange={handleChange}
+              onChange={(e) => {
+                handleChange(e, "password");
+              }}
               type="password"
               required
               sx={{ my: -2 }}

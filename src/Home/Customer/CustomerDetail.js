@@ -1,6 +1,6 @@
+//
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
 import axios from "axios";
 import React from "react";
 import { Typography } from "@mui/material";
@@ -11,14 +11,12 @@ const containerStyle = {
   backgroundColor: "#fff",
   boxShadow: "0px 2px 6px rgba(0, 0, 0, 0.15)",
   borderRadius: "8px",
-  fontWeight:"bold",
+  fontWeight: "bold",
 };
 
 const titleStyle = {
   fontWeight: "bold",
-  
   backgroundColor: "#ffff",
-  
 };
 
 const subtitleStyle = {
@@ -26,15 +24,39 @@ const subtitleStyle = {
 };
 
 const CustomerDetail = () => {
-  const [user, setUser] = useState({});
+  const [user1, setUser1] = useState({});
+  const [user2, setUser2] = useState({});
   const params = useParams();
+
   useEffect(() => {
-    axios
-      .get(`http://localhost:8080/customerdetail?id=${params.id}`)
-      .then((res) => {
-        setUser(res.data);
-      });
+    const fetchData = async () => {
+      try {
+        const response1 = await axios.get(
+          `http://localhost:9090/order/customerdetail?id=${params.id}`
+        );
+        setUser1(response1.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchData();
   }, [params.id]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response2 = await axios.get(
+          `http://localhost:8080/payment/customerdetail?id=${params.id}`
+        );
+        setUser2(response2.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchData();
+  }, [params.id]);
+
+  const user = { ...user1, ...user2 };
 
   return (
     <div style={containerStyle}>

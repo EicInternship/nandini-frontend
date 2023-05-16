@@ -148,7 +148,7 @@ const CustomerList = () => {
         <Button
           sx={{ fontWeight: "bold" }}
           component={Link}
-          to="/Add"
+          to={{ pathname: "/Add", state: { replace: true } }}
           size="small"
           variant="outlined"
           className="btn"
@@ -215,9 +215,10 @@ const CustomerList = () => {
                   <TableCell sx={{ fontSize: "16px" }}>{users.id}</TableCell>
                   <TableCell sx={{ fontSize: "16px" }}>
                     <Link
-                      style={{ color: "black" }}
+                      style={{ color: "black", textDecoration: "none" }}
                       to={{
                         pathname: `/CustomerDetail/${users.id}`,
+                        state: { replace: true },
                       }}
                     >
                       {users.firstName} {users.lastName}
