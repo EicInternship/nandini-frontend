@@ -18,16 +18,30 @@ const div1Style = {
   bottom: 0,
 };
 
+// const div2Style = {
+//   width: "100%",
+//   position: "fixed",
+//   color: "white",
+//   height: `${footerHeight}px`,
+//   marginTop: `${footerEltMarginTop}px`,
+//   bottom: -11,
+//   display: "flex",
+//   justifyContent: "center",
+//   alignItems: "center",
+// };
 const div2Style = {
-  width: "100%",
   position: "fixed",
   color: "white",
   height: `${footerHeight}px`,
   marginTop: `${footerEltMarginTop}px`,
+  marginLeft: "0px",
   bottom: -11,
+  left: 0,
+  right: 0,
   display: "flex",
   justifyContent: "center",
   alignItems: "center",
+  paddingLeft: 0, // Add this line
 };
 
 const iconContainerStyle = {
@@ -40,6 +54,7 @@ const iconContainerStyle = {
   height: "45px",
   margin: "0 20px",
   cursor: "pointer",
+
   transition: "background-color 0.3s ease",
 };
 

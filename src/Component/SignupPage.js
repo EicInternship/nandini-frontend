@@ -15,6 +15,7 @@ import {
 } from "@mui/material";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
+import { useNavigate } from "react-router-dom";
 
 const SignupPage = () => {
   const [formData, setFormData] = useState({
@@ -23,11 +24,12 @@ const SignupPage = () => {
     email: "",
     password: "",
     country: "",
-    phoneno: "",
+    phoneNo: "",
     userType: "",
   });
   const [message, setMessage] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
 
   const validatePassword = (password) => {
     const regex =
@@ -37,11 +39,6 @@ const SignupPage = () => {
 
   let passwordError = "";
   let passwordValid = validatePassword(password);
-
-  if (!passwordValid) {
-    passwordError =
-      "Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character.";
-  }
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -53,8 +50,16 @@ const SignupPage = () => {
       setFormData({ ...formData, [name]: value });
     }
   };
+
+  const handleLoginIconClick = () => {
+    navigate("/LoginPage");
+  };
   const handleSubmit = async (event) => {
     event.preventDefault();
+    if (!passwordValid) {
+      passwordError =
+        "Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character.";
+    }
     if (passwordValid) {
       try {
         const checkUserResponse = await axios.get(
@@ -68,7 +73,7 @@ const SignupPage = () => {
             email: "",
             password: "",
             userType: "",
-            phoneno: "",
+            phoneNo: "",
             country: "",
           });
           setPassword("");
@@ -84,7 +89,7 @@ const SignupPage = () => {
             email: "",
             password: "",
             userType: "",
-            phoneno: "",
+            phoneNo: "",
             country: "",
           });
           setPassword("");
@@ -103,7 +108,7 @@ const SignupPage = () => {
       sx={{
         width: "400px",
         margin: "auto",
-        marginTop: 6,
+        marginTop: -10,
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
@@ -183,9 +188,9 @@ const SignupPage = () => {
           </Grid>
           <Grid item xs={12}>
             <TextField
-              label="phoneno"
-              name="phoneno"
-              value={formData.phoneno}
+              label="phoneNo"
+              name="phoneNo"
+              value={formData.phoneNo}
               onChange={handleChange}
               margin="normal"
               required
@@ -210,24 +215,54 @@ const SignupPage = () => {
               </Select>
             </FormControl>
           </Grid>
-          <Grid item xs={12} sx={{ display: "flex", justifyContent: "center" }}>
-            <Button
+          <Grid
+            item
+            xs={12}
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              marginBottom: "12px",
+            }}
+          >
+            {/* <Button
               type="submit"
               variant="contained"
               size="large"
               sx={{ mr: 2 }}
-              //  disabled={!passwordValid}
+              style={{ backgroundColor: "#9C27B0" }}
+            >
+              <b>Signup</b>
+            </Button> */}
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              sx={{ mt: 3, mb: 2 }}
               style={{ backgroundColor: "#9C27B0" }}
             >
               <b>Signup</b>
             </Button>
-
-            <Link
-              to={{ pathname: "LoginPage", state: { replace: true } }}
-              variant="body2"
+          </Grid>
+          <Grid item xs={12}>
+            <h4
+              style={{
+                display: "flex",
+                alignItems: "center",
+                marginLeft: "38px",
+              }}
             >
-              <LoginIcon fontSize="large" style={{ color: "#9C27B0" }} />
-            </Link>
+              Are You already a Member?{" "}
+              <span
+                onClick={handleLoginIconClick}
+                style={{
+                  color: "#9C27B0",
+                  cursor: "pointer",
+                  marginLeft: "5px",
+                }}
+              >
+                Login here
+              </span>
+            </h4>
           </Grid>
 
           {message && <p sx={{ mt: 3 }}>{message}</p>}

@@ -3,8 +3,7 @@ import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
+import { useNavigate } from "react-router-dom";
 import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
@@ -12,34 +11,50 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-
-function Copyright(props) {
-  return (
-    <Typography
-      variant="body2"
-      color="text.secondary"
-      align="center"
-      {...props}
-    >
-      {"Copyright © "}
-      <Link color="inherit" href="https://mui.com/">
-        Your Website
-      </Link>
-      {new Date().getFullYear()}
-    </Typography>
-  );
-}
+import axios from "axios";
+import { useEffect, useState } from "react";
 
 const theme = createTheme();
 
-export default function ForgetPassword() {
-  const handleSubmit = (event) => {
+const ForgetPassword = () => {
+  const navigate = useNavigate();
+  const [message, setMessage] = useState("");
+  const [formData, setFormData] = useState({
+    email: "",
+  });
+
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
+
+    try {
+      const resetpasswordemail = await axios.post(
+        `http://localhost:8080/payment/checkEmailForReset`,
+        formData.email
+      );
+      console.log(formData.email);
+      if (resetpasswordemail.status === 200) {
+        setMessage("password sent successfully in your provided Email id");
+        setFormData({
+          email: "", // Clearing the email value
+        });
+      }
+    } catch (error) {
+      console.log(error);
+      setMessage("Please check your email");
+      setFormData({
+        email: "", // Clearing the email value
+      });
+      console.log("Email is not here in the database");
+    }
+  };
+
+  const handleBackToLogin = () => {
+    navigate("/LoginPage");
   };
 
   return (
@@ -48,7 +63,7 @@ export default function ForgetPassword() {
         <CssBaseline />
         <Box
           sx={{
-            marginTop: 7,
+            marginTop: -10,
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
@@ -60,45 +75,61 @@ export default function ForgetPassword() {
           <Typography component="h1" variant="h5">
             Reset Password
           </Typography>
-          <Box
-            component="form"
-            onSubmit={handleSubmit}
-            noValidate
-            sx={{ mt: 1 }}
-          >
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              id="email"
-              label="Email Address"
-              name="email"
-              autoComplete="email"
-              placeholder="Enter Email Adress"
-              autoFocus
-            />
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              sx={{ mt: 3, mb: 2 }}
+          <form onSubmit={handleSubmit} sx={{ mt: 1 }}>
+            <Box
+              // component="form"
+              // // onSubmit={handleSubmit}
+              // noValidate
+              sx={{ mt: 1 }}
             >
-              Reset password
-            </Button>
-            <Grid container>
-              <Grid item xs></Grid>
-              <Grid item>
-                <Link
-                  to={{ pathname: "LoginPage", state: { replace: true } }}
-                  variant="body2"
-                >
-                  {"Go to Login Page"}
-                </Link>
+              {formData ? (
+                <TextField
+                  margin="normal"
+                  required
+                  fullWidth
+                  id="email"
+                  label="Email Address"
+                  name="email"
+                  autoComplete="email"
+                  placeholder="Enter Email Adress"
+                  value={formData.email}
+                  onChange={(e) => {
+                    handleChange(e, "email");
+                  }}
+                  autoFocus
+                />
+              ) : (
+                ""
+              )}
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                sx={{ mt: 3, mb: 2 }}
+                style={{ backgroundColor: "#9C27B0" }}
+              >
+                <b>Reset password</b>
+              </Button>
+              <Grid container>
+                <Grid item xs></Grid>
+                <Grid item>
+                  <h4
+                    onClick={handleBackToLogin}
+                    style={{ cursor: "pointer", color: "#9C27B0" }}
+                  >
+                    Go to Login Page
+                  </h4>
+                </Grid>
+                <Grid item xs={12}>
+                  <p>{message}</p>
+                </Grid>
               </Grid>
-            </Grid>
-          </Box>
+            </Box>
+          </form>
         </Box>
       </Container>
     </ThemeProvider>
   );
-}
+};
+
+export default ForgetPassword;

@@ -17,6 +17,7 @@ import UserList from "./home/customer/UserList";
 import Product from "./component/product/Product";
 import ProductCard from "./component/product/ProductCard";
 import Productdetails from "./component/product/Productdetails";
+import ForgetPassword from "./component/ForgetPassword";
 import Category from "./component/Category";
 import Cart from "./component/product/Cart";
 import { Typography } from "@mui/material";
@@ -25,8 +26,8 @@ import { Box } from "@mui/material";
 import { AuthProvider } from "./component/auth";
 import { Route, Routes } from "react-router-dom";
 import { RequiredAuth } from "./component/RequiredAuth";
-import { AdminAuthProvider } from "./component/AdminAuth";
-import { RequiredAdminAuth } from "./component/ReuiredAdminAuth";
+
+import { RequiredAdminAuth } from "./component/RequiredAdminAuth";
 
 const Home = lazy(() => import("./home/Home"));
 const Footer = lazy(() => import("./home/Footer"));
@@ -42,6 +43,7 @@ function App() {
             <Route path="/Home" element={<Home />} />
             <Route path="/SignupPage" element={<SignupPage />} />
             <Route path="/LoginPage" element={<LoginPage />} />
+            <Route path="/ForgetPassword" element={<ForgetPassword />} />
             <Route path="/Catalog" element={<Catalog />} />
             <Route path="/Order" element={<Order />} />
             <Route path="/Inbox" element={<Inbox />} />
@@ -81,13 +83,6 @@ function App() {
                 </RequiredAuth>
               }
             />
-            {/* <Route path="*" element={<ErrorPage />} />
-            <Route path="/*" element={<ErrorPage />} /> */}
-          </Routes>
-        </AuthProvider>
-
-        <AdminAuthProvider>
-          <Routes>
             <Route path="Admin" element={<Admin />}></Route>
             <Route
               path="Add"
@@ -97,7 +92,14 @@ function App() {
                 </RequiredAdminAuth>
               }
             />
-            <Route path="Delete" element={<DeleteCustomer />} />
+            <Route
+              path="Delete"
+              element={
+                <RequiredAdminAuth>
+                  <DeleteCustomer />
+                </RequiredAdminAuth>
+              }
+            />
             <Route
               path="Update"
               element={
@@ -106,13 +108,37 @@ function App() {
                 </RequiredAdminAuth>
               }
             />
-            <Route path="UserList" element={<UserList />} />
-            <Route path="CustomerList" element={<CustomerList />} />
+            <Route
+              path="UserList"
+              element={
+                <RequiredAdminAuth>
+                  <UserList />
+                </RequiredAdminAuth>
+              }
+            />
+            <Route
+              path="CustomerList"
+              element={
+                <RequiredAdminAuth>
+                  <CustomerList />
+                </RequiredAdminAuth>
+              }
+            />
             <Route path="CustomerDetail/:id" element={<CustomerDetail />} />
-            <Route path="Customer/CustomerList" element={<CustomerList />} />
+            <Route
+              path="Customer/CustomerList"
+              element={
+                <RequiredAdminAuth>
+                  <CustomerList />
+                </RequiredAdminAuth>
+              }
+            />
+
+            <Route path="/*" element={<ErrorPage />} />
           </Routes>
-        </AdminAuthProvider>
+        </AuthProvider>
       </Suspense>
+
       <Suspense fallback={<div>Footer is Loading...</div>}>
         <Footer />
       </Suspense>

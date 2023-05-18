@@ -31,6 +31,11 @@ export const UserService = {
   getdetailsofProduct: (id) => {
     return axios.get(`http://localhost:9020/productDetails/${id}`);
   },
+  // checkforgetpassword: (email) => {
+  //   return axios.post(
+  //     "http://localhost:8080/payment/checkEmailForReset",email
+  //   );
+  // },
   addcategory: (data) => {
     return axios.post("http://localhost:9020/addcategory", data);
   },

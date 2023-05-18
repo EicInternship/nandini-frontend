@@ -1,15 +1,14 @@
 import React from "react";
-import { useAdminAuth } from "./AdminAuth";
+import { useAuth } from "./auth";
 
 import { Navigate, useNavigate, useLocation } from "react-router-dom";
-import { replace } from "formik";
 
 export const RequiredAdminAuth = ({ children }) => {
-  const auth = useAdminAuth();
+  const auth = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
 
-  if (!auth.user) {
+  if (!auth.admin) {
     return <Navigate to="/Admin" state={{ path: location.pathname }} />;
     // navigate("/LoginPage")
   }

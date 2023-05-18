@@ -41,6 +41,9 @@ import { Catalog } from "./Catalog";
 import { ErrorPage } from "./error/ErrorPage";
 import ReportGmailerrorredRoundedIcon from "@mui/icons-material/ReportGmailerrorredRounded";
 import Admin from "../component/Admin";
+import { RequiredAuth } from "../component/RequiredAuth";
+import { AuthProvider } from "../component/auth";
+import { RequiredAdminAuth } from "../component/RequiredAdminAuth";
 import AddCustomer from "./customer/AddCustomer";
 import DeleteCustomer from "./customer/DeleteCustomer";
 import UpdateCustomer from "./customer/UpdateCustomer";
@@ -334,7 +337,10 @@ const Home = () => {
             </StyledBadge>
           </IconButton>
           <Stack direction="row" spacing={2}>
-            <Avatar {...stringAvatar("Nandini Gondaliya")} onClick={handleProfile} />
+            <Avatar
+              {...stringAvatar("Nandini Gondaliya")}
+              onClick={handleProfile}
+            />
           </Stack>
         </Toolbar>
       </AppBar>
@@ -523,28 +529,101 @@ const Home = () => {
         <Typography>
           <AuthProvider>
             <Routes>
-              <Route path="/" element={<DashboardPage />} />
+              <Route path="/" element={<ProductCard />} />
+              <Route path="/Home" element={<Home />} />
               <Route path="/SignupPage" element={<SignupPage />} />
-              <Route path="/Admin" element={<Admin />} />
               <Route path="/LoginPage" element={<LoginPage />} />
-              <Route path="Customer/CustomerList" element={<CustomerList />} />
               <Route path="/Catalog" element={<Catalog />} />
               <Route path="/Order" element={<Order />} />
               <Route path="/Inbox" element={<Inbox />} />
               <Route path="/Marketing" element={<Marketing />} />
               <Route path="/DashboardPage" element={<DashboardPage />} />
+              <Route path="ProductCard" element={<ProductCard />} />
+
+              <Route
+                path="/Product"
+                element={
+                  <RequiredAuth>
+                    <Product />
+                  </RequiredAuth>
+                }
+              />
+              <Route
+                path="/Category"
+                element={
+                  <RequiredAuth>
+                    <Category />
+                  </RequiredAuth>
+                }
+              />
+              <Route
+                path="/productDetails/:id"
+                element={
+                  <RequiredAuth>
+                    <Productdetails />
+                  </RequiredAuth>
+                }
+              />
+              <Route
+                path="Cart"
+                element={
+                  <RequiredAuth>
+                    <Cart />
+                  </RequiredAuth>
+                }
+              />
+              <Route path="Admin" element={<Admin />}></Route>
+              <Route
+                path="Add"
+                element={
+                  <RequiredAdminAuth>
+                    <AddCustomer />
+                  </RequiredAdminAuth>
+                }
+              />
+              <Route
+                path="Delete"
+                element={
+                  <RequiredAdminAuth>
+                    <DeleteCustomer />
+                  </RequiredAdminAuth>
+                }
+              />
+              <Route
+                path="Update"
+                element={
+                  <RequiredAdminAuth>
+                    <UpdateCustomer />
+                  </RequiredAdminAuth>
+                }
+              />
+              <Route
+                path="UserList"
+                element={
+                  <RequiredAdminAuth>
+                    <UserList />
+                  </RequiredAdminAuth>
+                }
+              />
+              <Route
+                path="CustomerList"
+                element={
+                  <RequiredAdminAuth>
+                    <CustomerList />
+                  </RequiredAdminAuth>
+                }
+              />
+              <Route path="CustomerDetail/:id" element={<CustomerDetail />} />
+              <Route
+                path="Customer/CustomerList"
+                element={
+                  <RequiredAdminAuth>
+                    <CustomerList />
+                  </RequiredAdminAuth>
+                }
+              />
+
               <Route path="/*" element={<ErrorPage />} />
-              <Route path="/Add" element={<AddCustomer />} />
-              <Route path="/Delete" element={<DeleteCustomer />} />
-              <Route path="/Update" element={<UpdateCustomer />} />
-              <Route path="/UserList" element={<UserList />} />
-              <Route path="/CustomerList" element={<CustomerList />} />
-              <Route path="/CustomerDetail/:id" element={<CustomerDetail />} />
-              <Route path="/ProductCard" element={<ProductCard />} />
-              <Route path="/Product" element={<Product />} />
-              <Route path="/Category" element={<Category />} />
-              <Route path="/productDetails/:id" element={<Productdetails />} />
-              <Route path="/Cart" element={<Cart />} />
             </Routes>
           </AuthProvider>
         </Typography>

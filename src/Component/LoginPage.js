@@ -27,6 +27,9 @@ const LoginPage = () => {
     const { name, value } = event.target;
     setFormData({ ...formData, [name]: value });
   };
+  const handleForgetPassword = () => {
+    navigate("/ForgetPassword");
+  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -39,8 +42,10 @@ const LoginPage = () => {
         console.log(jwtDecode(res.data));
         // alert(res.data);
         auth.login(jwtDecode(res.data).sub);
-        console.log("succesful login");
         setMessage("You Are Logged In");
+        console.log("succesful login");
+        alert("Success login");
+
         navigate(redirectPage, { replace: true });
         setFormData({
           email: "",
@@ -48,19 +53,22 @@ const LoginPage = () => {
         });
       })
       .catch((error) => {
-        if (error.response.status === 403) {
-          setMessage("User is Not Found");
-          setFormData({
-            email: "",
-            password: "",
-          });
-        } else {
-          setMessage("Error Occured during Login");
-          setFormData({
-            email: "",
-            password: "",
-          });
-        }
+        //  if (error.response.status === 403) {
+        // alert(error.data);
+        console.log(error.data);
+        setMessage("User is Not Found");
+        setFormData({
+          email: "",
+          password: "",
+        });
+        // }
+        //  else {
+        //   setMessage("Error Occured during Login");
+        //   setFormData({
+        //     email: "",
+        //     password: "",
+        //   });
+        // }
       });
   };
   const passwordLength = formData.password.length;
@@ -76,10 +84,11 @@ const LoginPage = () => {
       sx={{
         width: "400px",
         margin: "auto",
-        marginTop: 8,
+        marginTop: -10,
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
+        overflow: "hidden",
       }}
     >
       <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>{emoji}</Avatar>
@@ -116,7 +125,22 @@ const LoginPage = () => {
             />
           </Grid>
           <Grid item xs={12}>
-            <Button
+            <h4
+              style={{
+                display: "flex",
+                alignItems: "center",
+                marginLeft: "2px",
+                marginTop: "10px",
+                color: "#9C27B0",
+                cursor: "pointer",
+              }}
+              onClick={handleForgetPassword}
+            >
+              Forget Password?
+            </h4>
+          </Grid>
+          <Grid item xs={12}>
+            {/* <Button
               type="submit"
               variant="contained"
               size="large"
@@ -125,11 +149,23 @@ const LoginPage = () => {
                 backgroundColor: "#9C27B0",
                 alignContent: "center",
                 display: "flex",
+                marginLeft: "155px",
+                marginTop: "0px",
               }}
             >
               <b>Login</b>
+            </Button> */}
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              sx={{ mt: 3, mb: 2 }}
+              style={{ backgroundColor: "#9C27B0" }}
+            >
+              <b>LOGIN</b>
             </Button>
           </Grid>
+
           <Grid item xs={12}>
             <p>{message}</p>
           </Grid>

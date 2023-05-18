@@ -216,7 +216,6 @@ export const DashboardPage = (props) => {
                 }}
               >
                 <SvgIcon>
-                  cd
                   <UsersIcon />
                 </SvgIcon>
               </Avatar>
