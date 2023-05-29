@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { UserService } from "../service/UserService";
+import { addcategory } from "../Service/Service";
 import { TextField, Box, Button, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
@@ -28,7 +28,7 @@ function Category() {
     }
     if (Object.keys(validationErrors).length === 0) {
       // if no validation errors, submit the form
-      UserService.addcategory(Categorydata).then((res) => {
+      addcategory(Categorydata).then((res) => {
         console.log(res.data);
         console.log("successfully added");
         nevigate("/product");

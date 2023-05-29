@@ -1,5 +1,5 @@
 .CartItem__item {
-    border-bottom: 1px solid rgb(187, 186, 186);
+    border-bottom: 1px solid gray;
     padding: 10px 0;
     margin-top: 10px;
   }
@@ -18,7 +18,7 @@
     object-fit: cover;
   }
   .CartItem__item:nth-child(1) {
-    border-top: 1px solid rgb(187, 186, 186);
+    border-top: 1px solid gray;
   }
   
   .CartItem__button {
